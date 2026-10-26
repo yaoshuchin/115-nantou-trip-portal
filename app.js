@@ -160,27 +160,21 @@ function renderTabsNavigation() {
   let html = `
     <button class="tab-btn ${AppState.currentTab === 'tab-handbook' ? 'active' : ''}" data-tab="tab-handbook">
       <span>🏠 手冊核心</span>
-      <span class="tab-badge-indicator">手冊</span>
     </button>
-    <a href="https://yaoshuchin.github.io/ntjh-trip-handbook-2026/app.html" target="_blank" rel="noopener noreferrer" class="tab-btn tab-link-btn" title="在新分頁開啟 115投中畢旅電子手冊 PWA 網頁版">
-      <span>📖 115投中畢旅電子手冊 ↗</span>
-      <span class="tab-badge-indicator" style="background:#0ea5e9; color:#fff;">線上版</span>
+    <a href="https://yaoshuchin.github.io/ntjh-trip-handbook-2026/app.html" target="_blank" rel="noopener noreferrer" class="tab-btn tab-link-btn" title="在新分頁開啟電子手冊 PWA 網頁版">
+      <span>📖 電子手冊 ↗</span>
     </a>
     <button class="tab-btn ${AppState.currentTab === 'tab-details' ? 'active' : ''}" data-tab="tab-details">
       <span>🗺️ 詳細行程</span>
-      <span class="tab-badge-indicator" style="background:#10b981; color:#fff;">14單元</span>
     </button>
     <button class="tab-btn ${AppState.currentTab === 'tab-gallery' ? 'active' : ''}" data-tab="tab-gallery">
       <span>📸 實境時光廊</span>
-      <span class="tab-badge-indicator" style="background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff;">${totalPhotosCount}張</span>
     </button>
     <button class="tab-btn ${AppState.currentTab === 'tab-class-albums' ? 'active' : ''}" data-tab="tab-class-albums">
       <span>🎓 班級相簿</span>
-      <span class="tab-badge-indicator" style="background:linear-gradient(135deg,#f59e0b,#ea580c); color:#fff;">${totalClassPhotosCount}張</span>
     </button>
     <button class="tab-btn ${AppState.currentTab === 'tab-photo-download' ? 'active' : ''}" data-tab="tab-photo-download">
       <span>📥 真實相片下載</span>
-      <span class="tab-badge-indicator" style="background:#8b5cf6; color:#fff;">9班雲端</span>
     </button>
   `;
 
