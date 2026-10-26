@@ -242,8 +242,11 @@ def main():
     for wrong, right in fix_pack:
         trip_data_raw = trip_data_raw.replace(wrong, right)
 
+    from build_gallery_data import build as build_gallery
+    all_stations, all_photos = build_gallery()
+
     units_data = scan_all()
-    # Merge rich educational notes into each unit
+    # Merge rich educational notes and live photos into each unit
     for u in units_data:
         uid = u["id"]
         if uid in UNIT_NOTES:
@@ -252,8 +255,17 @@ def main():
         else:
             u["highlights"] = []
             u["qa"] = []
+        
+        # Attach matching live photos and station info
+        u_photos = [p for p in all_photos if p["unitId"] == uid]
+        u["photos"] = u_photos
+        u["photoCount"] = len(u_photos)
+        u_stations = [st for st in all_stations if st["unitId"] == uid]
+        u["stations"] = u_stations
     
     units_json = json.dumps(units_data, ensure_ascii=False, indent=2)
+    stations_json = json.dumps(all_stations, ensure_ascii=False, indent=2)
+    photos_json = json.dumps(all_photos, ensure_ascii=False, indent=2)
     
     compatibility_code = """
 // 資料庫自動相容性補強 (Normalization)
@@ -315,9 +327,11 @@ if (TRIP_DATA) {
 const TRIP_DATA = {trip_data_raw};
 {compatibility_code}
 const UNITS_DATA = {units_json};
+const GALLERY_STATIONS = {stations_json};
+const GALLERY_PHOTOS = {photos_json};
 
 if (typeof module !== 'undefined') {{
-  module.exports = {{ TRIP_DATA, UNITS_DATA }};
+  module.exports = {{ TRIP_DATA, UNITS_DATA, GALLERY_STATIONS, GALLERY_PHOTOS }};
 }}
 """
     

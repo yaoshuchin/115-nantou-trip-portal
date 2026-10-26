@@ -1435,3 +1435,572 @@ body {
   box-shadow: var(--shadow-md);
   border-color: var(--primary);
 }
+
+/* ==========================================================================
+   畢旅實境時光廊 Photo Gallery 專用樣式
+   ========================================================================== */
+.gallery-hero-actions {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-gallery-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #ffffff !important;
+  font-weight: 700;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+}
+
+.btn-gallery-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+}
+
+.gallery-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-card-subtle);
+  padding: 4px 6px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  margin-left: auto;
+}
+
+/* 站點篩選列 Station Switcher */
+.gallery-filter-card {
+  padding: 20px 24px;
+}
+
+.gallery-stations-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-day-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-day-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: var(--bg-card-subtle);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  letter-spacing: 0.5px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.btn-station-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-station-filter:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.btn-station-filter.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+}
+
+.btn-station-badge {
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.08);
+  font-family: var(--font-mono);
+}
+
+.btn-station-filter.active .btn-station-badge {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* 當前站點導覽橫幅 */
+.gallery-station-banner {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(13, 148, 136, 0.08));
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.station-banner-info h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.station-banner-info p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 800px;
+}
+
+.station-banner-meta {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.station-banner-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* 瀑布流與相片網格 Masonry & Grid */
+.photos-masonry-grid {
+  column-count: 3;
+  column-gap: 20px;
+  margin-bottom: 40px;
+}
+
+.photos-masonry-grid.view-grid {
+  column-count: unset;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .photos-masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .photos-masonry-grid {
+    column-count: 1;
+  }
+}
+
+/* 相片卡片 Photo Card */
+.photo-card {
+  break-inside: avoid;
+  margin-bottom: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.photo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary);
+}
+
+.photo-img-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-card-subtle);
+}
+
+.photo-img-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.photo-card:hover .photo-img-wrap img {
+  transform: scale(1.03);
+}
+
+.photo-badge-bar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.badge-photo-station {
+  background: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
+
+.badge-photo-time {
+  background: rgba(2, 132, 199, 0.85);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  backdrop-filter: blur(4px);
+}
+
+.photo-card-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.photo-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  line-height: 1.4;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.photo-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  flex-grow: 1;
+}
+
+.photo-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  border-top: 1px solid var(--border-light);
+  padding-top: 10px;
+}
+
+.photo-zoom-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* 現有 14 個單元內的實境相片區塊 */
+.unit-photos-section {
+  margin-top: 32px;
+}
+
+.unit-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+/* ==========================================================================
+   升級版大圖燈箱與全螢幕輪播器 Lightbox & Fullscreen Slideshow
+   ========================================================================== */
+.lightbox-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(8, 12, 22, 0.96);
+  z-index: 1000;
+  flex-direction: column;
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.lightbox-modal.active {
+  display: flex;
+}
+
+/* 輪播倒數進度條 */
+.lightbox-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  z-index: 1010;
+  transition: width 0.1s linear;
+}
+
+.lightbox-progress-bar.animate {
+  transition: width 3.5s linear;
+  width: 100%;
+}
+
+/* 頂部列 */
+.lightbox-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  z-index: 1005;
+}
+
+.lightbox-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.lightbox-title-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 450px;
+}
+
+.lightbox-counter {
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.15);
+  padding: 3px 8px;
+  border-radius: 12px;
+  color: #e2e8f0;
+}
+
+.lightbox-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-lightbox-action {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-lightbox-action:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.lightbox-speed-select {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.lightbox-speed-select option {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.lightbox-close-new {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-left: 6px;
+}
+
+.lightbox-close-new:hover {
+  background: var(--danger);
+  transform: rotate(90deg);
+}
+
+/* 主展示舞台 */
+.lightbox-stage {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 60px;
+  overflow: hidden;
+}
+
+.lightbox-img-wrap {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-img-wrap img {
+  max-width: 100%;
+  max-height: calc(100vh - 230px);
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.lightbox-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 23, 42, 0.7);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1006;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.lightbox-nav-btn.prev {
+  left: 20px;
+}
+
+.lightbox-nav-btn.next {
+  right: 20px;
+}
+
+.lightbox-nav-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* 底部說明與縮圖 */
+.lightbox-bottom-drawer {
+  background: rgba(15, 23, 42, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 24px;
+  z-index: 1005;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lightbox-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lightbox-meta-info {
+  display: flex;
+  gap: 14px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.lightbox-caption-desc {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #f1f5f9;
+}
+
+.lightbox-thumbs-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 0;
+  scrollbar-width: thin;
+}
+
+.lightbox-thumb-item {
+  position: relative;
+  width: 60px;
+  height: 42px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.6;
+  transition: all 0.2s;
+}
+
+.lightbox-thumb-item.active {
+  border-color: var(--primary);
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.lightbox-thumb-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

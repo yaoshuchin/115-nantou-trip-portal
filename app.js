@@ -47,8 +47,13 @@ const AppState = {
   currentClass: '901',
   unitsState: {}, // 紀錄各單元簡報當前投影片頁碼 { 'unit-01': 0, ... }
   packingState: JSON.parse(localStorage.getItem('ntjh_packing') || '{}'),
-  lightboxImages: [],
-  lightboxIndex: 0
+  galleryFilter: 'all', // 'all' 或 station-01 ~ station-14
+  galleryView: 'masonry', // 'masonry' 或 'grid'
+  slideshowPlaying: false,
+  slideshowTimer: null,
+  slideshowSpeed: 3500,
+  activePhotoList: [],
+  activePhotoIndex: 0
 };
 
 // 隱私模式切換
@@ -91,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   renderTabsNavigation();
   renderHandbook();
+  renderGalleryTab();
   renderAllUnits();
   initSearch();
   initPackingList();
@@ -143,20 +149,29 @@ function renderTabsNavigation() {
   const tabsScroll = document.getElementById('tabs-scroll-container');
   if (!tabsScroll || typeof UNITS_DATA === 'undefined') return;
 
+  const totalPhotosCount = typeof GALLERY_PHOTOS !== 'undefined' ? GALLERY_PHOTOS.length : 392;
+
   let html = `
     <button class="tab-btn active" data-tab="tab-handbook">
       <span>🏠 手冊核心</span>
-      <span class="tab-badge-indicator">PDF</span>
+      <span class="tab-badge-indicator">手冊</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-gallery">
+      <span>📸 實境時光廊</span>
+      <span class="tab-badge-indicator" style="background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff;">${totalPhotosCount}張</span>
     </button>
   `;
 
   UNITS_DATA.forEach((unit, idx) => {
     const num = String(idx + 1).padStart(2, '0');
-    const hasVideo = unit.videoCount > 0 ? '🎬' : '';
+    const badgeParts = [];
+    if (unit.videoCount > 0) badgeParts.push('🎬');
+    if (unit.photoCount > 0) badgeParts.push(`${unit.photoCount}照`);
+    const badgeText = badgeParts.join(' ');
     html += `
       <button class="tab-btn" data-tab="tab-${unit.id}">
         <span>${num}. ${unit.tabName}</span>
-        ${hasVideo ? `<span class="tab-badge-indicator">${hasVideo}</span>` : ''}
+        ${badgeText ? `<span class="tab-badge-indicator">${badgeText}</span>` : ''}
       </button>
     `;
   });
@@ -655,6 +670,7 @@ function renderAllUnits() {
             <span class="badge-date">🕒 ${unit.date}</span>
             <span class="badge-date">📑 21 頁完整簡報</span>
             ${unit.videoCount > 0 ? `<span class="badge-date" style="color:var(--primary); font-weight:700;">🎬 ${unit.videoCount} 部影音導覽</span>` : ''}
+            ${unit.photoCount > 0 ? `<span class="badge-date" style="color:var(--secondary); font-weight:700;">📸 ${unit.photoCount} 張實境相片</span>` : ''}
           </div>
           <h2>${unit.title}</h2>
           <p>${unit.description}</p>
@@ -668,6 +684,9 @@ function renderAllUnits() {
 
         <!-- 高清資訊圖表專區 -->
         ${renderUnitInfographicsSection(unit)}
+
+        <!-- 現場實境精彩相片 (整合對應站點相片) -->
+        ${renderUnitPhotosSection(unit)}
 
         <!-- 單元重點講義與互動問答 -->
         ${renderUnitNotesSection(unit)}
@@ -969,54 +988,562 @@ function renderUnitNotesSection(unit) {
   `;
 }
 
+// 渲染單元內對應站點的實境相片專區
+function renderUnitPhotosSection(unit) {
+  if (!unit.photos || unit.photos.length === 0) return '';
+  const st = unit.stations && unit.stations[0] ? unit.stations[0] : null;
+  const stName = st ? st.name : '本站現場紀實';
+  const timeRange = st ? st.timeRange : '';
+
+  return `
+    <div class="unit-section-title">
+      <h3><span>📸</span> 現場實境精彩紀實 · ${stName}</h3>
+      <span class="section-indicator">共 ${unit.photos.length} 張現場實拍相片 ${timeRange ? `(${timeRange})` : ''}</span>
+    </div>
+    <div class="deck-toolbar" style="margin-bottom:16px;">
+      <div class="deck-counter" style="color:var(--text-main); font-weight:700;">
+        <span>📍 ${st ? st.name : unit.tabName}</span>
+        <span style="color:var(--text-muted); font-size:0.85rem; margin-left:8px;">${st ? st.description : ''}</span>
+      </div>
+      <div class="deck-actions">
+        <button class="btn-deck" onclick="startUnitSlideshow('${unit.id}')">
+          <span>▶️</span> 輪播本站實境相片 (${unit.photos.length})
+        </button>
+        <button class="btn-deck" onclick="viewStationInGallery('${st ? st.id : ''}')">
+          <span>🧭</span> 在實境時光廊檢視 ↗
+        </button>
+      </div>
+    </div>
+    <div class="unit-photos-grid">
+      ${unit.photos.map((p, idx) => `
+        <div class="photo-card" onclick="openLightboxFromList('${unit.id}', ${idx})">
+          <div class="photo-img-wrap">
+            <img src="${p.src}" alt="${p.title}" loading="lazy">
+            <div class="photo-badge-bar">
+              <span class="badge-photo-station">${p.stationName}</span>
+              <span class="badge-photo-time">${p.time}</span>
+            </div>
+          </div>
+          <div class="photo-card-body">
+            <div class="photo-card-title">
+              <span>${p.title}</span>
+              <span style="font-size:0.75rem; color:var(--text-light); font-family:var(--font-mono);">#${idx+1}</span>
+            </div>
+            <p class="photo-card-desc">${p.caption}</p>
+            <div class="photo-card-footer">
+              <span>${p.fileName}</span>
+              <span class="photo-zoom-hint">🔍 點擊高清放大</span>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
 /* ==========================================================================
-   燈箱 Lightbox
+   實境時光廊 Photo Gallery 模組
+   ========================================================================== */
+function renderGalleryTab() {
+  if (typeof GALLERY_STATIONS === 'undefined' || typeof GALLERY_PHOTOS === 'undefined') return;
+
+  renderStationFilterButtons();
+  renderStationBanner();
+  renderGalleryPhotos();
+}
+
+function renderStationFilterButtons() {
+  const container = document.getElementById('gallery-stations-filter');
+  if (!container || typeof GALLERY_STATIONS === 'undefined') return;
+
+  // Group stations by Day
+  const dayGroups = {
+    '全部': [{ id: 'all', name: '全部站點', count: GALLERY_PHOTOS.length, icon: '🌟' }],
+    'Day 0 行前整備': [],
+    'Day 1 田寮與墾丁': [],
+    'Day 2 義大世界': [],
+    'Day 3 賦歸返校': []
+  };
+
+  GALLERY_STATIONS.forEach(st => {
+    if (st.day === 'Day 0') dayGroups['Day 0 行前整備'].push(st);
+    else if (st.day === 'Day 1') dayGroups['Day 1 田寮與墾丁'].push(st);
+    else if (st.day === 'Day 2') dayGroups['Day 2 義大世界'].push(st);
+    else if (st.day === 'Day 3') dayGroups['Day 3 賦歸返校'].push(st);
+  });
+
+  let html = '';
+  for (const [groupName, stations] of Object.entries(dayGroups)) {
+    if (stations.length === 0) continue;
+    html += `
+      <div class="filter-day-group">
+        <span class="filter-day-label">${groupName}</span>
+        ${stations.map(st => {
+          const isActive = AppState.galleryFilter === st.id;
+          const count = st.photoCount !== undefined ? st.photoCount : st.count;
+          const label = st.id === 'all' ? st.name : `${st.stationIndex ? `站 ${String(st.stationIndex).padStart(2,'0')} · ` : ''}${st.name}`;
+          return `
+            <button class="btn-station-filter ${isActive ? 'active' : ''}" onclick="setGalleryFilter('${st.id}')">
+              <span>${st.icon || '📍'}</span>
+              <span>${label}</span>
+              <span class="btn-station-badge">${count}</span>
+            </button>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+function renderStationBanner() {
+  const banner = document.getElementById('gallery-station-banner');
+  const countIndicator = document.getElementById('gallery-current-count-indicator');
+  if (!banner || typeof GALLERY_STATIONS === 'undefined') return;
+
+  if (AppState.galleryFilter === 'all') {
+    if (countIndicator) countIndicator.innerText = `共 ${GALLERY_PHOTOS.length} 張現場相片 · 14 個分站全集`;
+    banner.innerHTML = `
+      <div class="station-banner-info">
+        <h3><span>🌟</span> 畢旅三天二夜 14 站現場紀實相簿總覽</h3>
+        <p>
+          從 10/20 行前會、10/21 出發、田寮惡地、海生館、貓鼻頭、墾丁大街夜市、福華大飯店，到 10/22 義大遊樂世界、天悅飯店夜巡，以及 10/23 回程平安解散，全歷程 392 張現場寫真完整展現！
+        </p>
+        <div class="station-banner-meta">
+          <span class="badge-date">🕒 115.10.20 ～ 10.23</span>
+          <span class="badge-tag">全校 178 位同學與師長</span>
+          <span class="badge-date" style="color:var(--primary); font-weight:700;">📸 392 張相片</span>
+        </div>
+      </div>
+      <div class="station-banner-actions">
+        <button class="btn-deck btn-gallery-primary" onclick="startGlobalSlideshow()">
+          <span>▶️</span> 輪播全部 392 張相片
+        </button>
+      </div>
+    `;
+  } else {
+    const st = GALLERY_STATIONS.find(s => s.id === AppState.galleryFilter);
+    if (!st) return;
+
+    if (countIndicator) countIndicator.innerText = `站點 ${st.stationIndex}：${st.name} · 共 ${st.photoCount} 張相片`;
+    banner.innerHTML = `
+      <div class="station-banner-info">
+        <h3>
+          <span>📍</span>
+          <span>第 ${String(st.stationIndex).padStart(2, '0')} 站 · ${st.name}</span>
+          <span class="badge-tag" style="font-size:0.75rem;">${st.day} · ${st.tag}</span>
+        </h3>
+        <p>${st.description}</p>
+        <div class="station-banner-meta">
+          <span class="badge-date">📅 日期：${st.date}</span>
+          <span class="badge-date">🕒 現場時間：${st.timeRange || '實錄'}</span>
+          <span class="badge-date" style="color:var(--secondary); font-weight:700;">📸 ${st.photoCount} 張實拍照片</span>
+          <span class="badge-tag" style="cursor:pointer;" onclick="switchTab('tab-${st.unitId}')">📖 對應：${st.unitTitle} ↗</span>
+        </div>
+      </div>
+      <div class="station-banner-actions">
+        <button class="btn-deck btn-gallery-primary" onclick="startSlideshowByStation('${st.id}')">
+          <span>▶️</span> 輪播本站相片 (${st.photoCount})
+        </button>
+        <button class="btn-deck" onclick="switchTab('tab-${st.unitId}')">
+          <span>📑</span> 查看單元教材 ↗
+        </button>
+      </div>
+    `;
+  }
+}
+
+function renderGalleryPhotos() {
+  const container = document.getElementById('gallery-photos-container');
+  if (!container || typeof GALLERY_PHOTOS === 'undefined') return;
+
+  const filtered = AppState.galleryFilter === 'all'
+    ? GALLERY_PHOTOS
+    : GALLERY_PHOTOS.filter(p => p.stationId === AppState.galleryFilter);
+
+  // Apply layout mode
+  if (AppState.galleryView === 'grid') {
+    container.classList.add('view-grid');
+  } else {
+    container.classList.remove('view-grid');
+  }
+
+  container.innerHTML = filtered.map((p, idx) => `
+    <div class="photo-card" onclick="openLightboxFromGallery(${idx})">
+      <div class="photo-img-wrap">
+        <img src="${p.src}" alt="${p.title}" loading="lazy">
+        <div class="photo-badge-bar">
+          <span class="badge-photo-station">${p.stationName}</span>
+          <span class="badge-photo-time">${p.time}</span>
+        </div>
+      </div>
+      <div class="photo-card-body">
+        <div class="photo-card-title">
+          <span>${p.title}</span>
+          <span style="font-size:0.75rem; color:var(--text-light); font-family:var(--font-mono);">#${p.fileName.match(/\\d+/)?.[0] || (idx+1)}</span>
+        </div>
+        <p class="photo-card-desc">${p.caption}</p>
+        <div class="photo-card-footer">
+          <span>${p.fileName}</span>
+          <span class="photo-zoom-hint">🔍 點擊高清放大</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.setGalleryFilter = function(filterId) {
+  AppState.galleryFilter = filterId;
+  renderStationFilterButtons();
+  renderStationBanner();
+  renderGalleryPhotos();
+};
+
+window.setGalleryViewMode = function(mode) {
+  AppState.galleryView = mode;
+  const btnMasonry = document.getElementById('btn-view-masonry');
+  const btnGrid = document.getElementById('btn-view-grid');
+  if (btnMasonry && btnGrid) {
+    if (mode === 'masonry') {
+      btnMasonry.classList.add('active');
+      btnGrid.classList.remove('active');
+    } else {
+      btnMasonry.classList.remove('active');
+      btnGrid.classList.add('active');
+    }
+  }
+  renderGalleryPhotos();
+};
+
+window.viewStationInGallery = function(stationId) {
+  switchTab('tab-gallery');
+  if (stationId) {
+    setGalleryFilter(stationId);
+  }
+  setTimeout(() => {
+    const banner = document.getElementById('gallery-station-banner');
+    if (banner) banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+};
+
+window.startGlobalSlideshow = function() {
+  if (typeof GALLERY_PHOTOS === 'undefined' || GALLERY_PHOTOS.length === 0) return;
+  startSlideshow(GALLERY_PHOTOS, 0);
+};
+
+window.startSlideshowByStation = function(stationId) {
+  const filtered = GALLERY_PHOTOS.filter(p => p.stationId === stationId);
+  if (filtered.length > 0) {
+    startSlideshow(filtered, 0);
+  }
+};
+
+window.startUnitSlideshow = function(unitId) {
+  const unit = UNITS_DATA.find(u => u.id === unitId);
+  if (unit && unit.photos && unit.photos.length > 0) {
+    startSlideshow(unit.photos, 0);
+  }
+};
+
+window.playRandomPhoto = function() {
+  if (typeof GALLERY_PHOTOS === 'undefined' || GALLERY_PHOTOS.length === 0) return;
+  const rnd = Math.floor(Math.random() * GALLERY_PHOTOS.length);
+  openLightboxPhoto(GALLERY_PHOTOS, rnd);
+};
+
+window.openLightboxFromGallery = function(index) {
+  const filtered = AppState.galleryFilter === 'all'
+    ? GALLERY_PHOTOS
+    : GALLERY_PHOTOS.filter(p => p.stationId === AppState.galleryFilter);
+  openLightboxPhoto(filtered, index);
+};
+
+window.openLightboxFromList = function(unitId, index) {
+  const unit = UNITS_DATA.find(u => u.id === unitId);
+  if (unit && unit.photos && unit.photos.length > 0) {
+    openLightboxPhoto(unit.photos, index);
+  }
+};
+
+/* ==========================================================================
+   升級版大圖燈箱與全螢幕自動輪播器 (Lightbox & Slideshow Engine)
    ========================================================================== */
 function initLightbox() {
   const modal = document.getElementById('lightbox-modal');
   if (!modal) return;
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal || e.target.classList.contains('lightbox-img-wrap')) {
+    // 點擊空白背景關閉 (避免點擊 controls/img 時關閉)
+    if (e.target === modal || e.target.id === 'lightbox-img-wrap') {
       closeLightbox();
     }
   });
-
-  const closeBtn = document.getElementById('lightbox-close-btn');
-  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
 }
 
-window.openLightboxSingle = function(imgSrc, caption) {
-  const modal = document.getElementById('lightbox-modal');
-  const img = document.getElementById('lightbox-img');
-  const cap = document.getElementById('lightbox-caption');
-  if (!modal || !img) return;
+window.openLightboxPhoto = function(photoList, index) {
+  if (!photoList || photoList.length === 0) return;
 
-  img.src = imgSrc;
-  if (cap) cap.innerText = caption || '';
-  modal.classList.add('active');
+  AppState.activePhotoList = photoList;
+  AppState.activePhotoIndex = Math.max(0, Math.min(index, photoList.length - 1));
+
+  updateLightboxUI();
+
+  const modal = document.getElementById('lightbox-modal');
+  if (modal) modal.classList.add('active');
+};
+
+function updateLightboxUI() {
+  const list = AppState.activePhotoList;
+  const idx = AppState.activePhotoIndex;
+  if (!list || list.length === 0 || !list[idx]) return;
+
+  const p = list[idx];
+
+  const img = document.getElementById('lightbox-img');
+  const tag = document.getElementById('lightbox-station-tag');
+  const title = document.getElementById('lightbox-photo-title');
+  const counter = document.getElementById('lightbox-counter');
+  const timeText = document.getElementById('lightbox-time-text');
+  const stationText = document.getElementById('lightbox-station-text');
+  const captionText = document.getElementById('lightbox-caption-text');
+  const prevBtn = document.getElementById('lightbox-btn-prev');
+  const nextBtn = document.getElementById('lightbox-btn-next');
+
+  if (img) {
+    img.style.opacity = '0.4';
+    img.src = p.src;
+    img.onload = () => { img.style.opacity = '1'; };
+  }
+
+  if (tag) tag.innerText = p.stationName || '實境紀實';
+  if (title) title.innerText = p.title || p.fileName;
+  if (counter) counter.innerText = `${idx + 1} / ${list.length}`;
+  if (timeText) timeText.innerText = `🕒 拍攝時間：${p.time || '實況'}`;
+  if (stationText) stationText.innerText = `📍 所屬行程：${p.stationName} (${p.day || ''})`;
+  if (captionText) captionText.innerText = p.caption || '';
+
+  // 顯示或隱藏前後按鈕 (單張時隱藏)
+  const isMultiple = list.length > 1;
+  if (prevBtn) prevBtn.style.display = isMultiple ? 'flex' : 'none';
+  if (nextBtn) nextBtn.style.display = isMultiple ? 'flex' : 'none';
+
+  renderLightboxThumbsStrip();
+}
+
+function renderLightboxThumbsStrip() {
+  const strip = document.getElementById('lightbox-thumbs-strip');
+  const list = AppState.activePhotoList;
+  const curIdx = AppState.activePhotoIndex;
+  if (!strip || !list || list.length <= 1) {
+    if (strip) strip.style.display = 'none';
+    return;
+  }
+
+  strip.style.display = 'flex';
+  strip.innerHTML = list.map((item, i) => `
+    <div class="lightbox-thumb-item ${i === curIdx ? 'active' : ''}" onclick="jumpLightboxPhoto(${i})" title="${item.title}">
+      <img src="${item.src}" alt="${item.title}" loading="lazy">
+    </div>
+  `).join('');
+
+  // 自動捲動讓 active 縮圖居中
+  const activeThumb = strip.children[curIdx];
+  if (activeThumb) {
+    activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+}
+
+window.jumpLightboxPhoto = function(index) {
+  AppState.activePhotoIndex = index;
+  updateLightboxUI();
+  if (AppState.slideshowPlaying) {
+    restartSlideshowTimer();
+  }
+};
+
+window.prevLightboxPhoto = function() {
+  const list = AppState.activePhotoList;
+  if (!list || list.length <= 1) return;
+  AppState.activePhotoIndex = (AppState.activePhotoIndex - 1 + list.length) % list.length;
+  updateLightboxUI();
+  if (AppState.slideshowPlaying) {
+    restartSlideshowTimer();
+  }
+};
+
+window.nextLightboxPhoto = function() {
+  const list = AppState.activePhotoList;
+  if (!list || list.length <= 1) return;
+  AppState.activePhotoIndex = (AppState.activePhotoIndex + 1) % list.length;
+  updateLightboxUI();
+  if (AppState.slideshowPlaying) {
+    restartSlideshowTimer();
+  }
+};
+
+window.startSlideshow = function(photoList, startIndex = 0) {
+  if (photoList && photoList.length > 0) {
+    AppState.activePhotoList = photoList;
+    AppState.activePhotoIndex = startIndex;
+  }
+  AppState.slideshowPlaying = true;
+  updateLightboxUI();
+
+  const modal = document.getElementById('lightbox-modal');
+  if (modal) modal.classList.add('active');
+
+  updateSlideshowButtonState();
+  restartSlideshowTimer();
+};
+
+window.stopSlideshow = function() {
+  AppState.slideshowPlaying = false;
+  if (AppState.slideshowTimer) {
+    clearTimeout(AppState.slideshowTimer);
+    AppState.slideshowTimer = null;
+  }
+  updateSlideshowButtonState();
+  resetProgressBar();
+};
+
+window.toggleSlideshowPlay = function() {
+  if (AppState.slideshowPlaying) {
+    stopSlideshow();
+  } else {
+    startSlideshow(AppState.activePhotoList, AppState.activePhotoIndex);
+  }
+};
+
+function updateSlideshowButtonState() {
+  const icon = document.getElementById('lightbox-play-icon');
+  const text = document.getElementById('lightbox-play-text');
+  if (icon && text) {
+    if (AppState.slideshowPlaying) {
+      icon.innerText = '⏸️';
+      text.innerText = '暫停輪播';
+    } else {
+      icon.innerText = '▶️';
+      text.innerText = '自動輪播';
+    }
+  }
+}
+
+function restartSlideshowTimer() {
+  if (AppState.slideshowTimer) clearTimeout(AppState.slideshowTimer);
+  resetProgressBar();
+
+  // 觸發進度條平滑動畫
+  const bar = document.getElementById('lightbox-progress-bar');
+  if (bar) {
+    bar.style.transition = `width ${AppState.slideshowSpeed}ms linear`;
+    requestAnimationFrame(() => {
+      bar.style.width = '100%';
+    });
+  }
+
+  AppState.slideshowTimer = setTimeout(() => {
+    if (AppState.slideshowPlaying) {
+      nextLightboxPhoto();
+    }
+  }, AppState.slideshowSpeed);
+}
+
+function resetProgressBar() {
+  const bar = document.getElementById('lightbox-progress-bar');
+  if (bar) {
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+  }
+}
+
+window.setSlideshowSpeed = function(speedMs) {
+  AppState.slideshowSpeed = parseInt(speedMs) || 3500;
+  if (AppState.slideshowPlaying) {
+    restartSlideshowTimer();
+  }
+};
+
+window.toggleLightboxFullscreen = function() {
+  const modal = document.getElementById('lightbox-modal');
+  if (!modal) return;
+
+  if (!document.fullscreenElement) {
+    if (modal.requestFullscreen) modal.requestFullscreen().catch(() => {});
+    else if (modal.webkitRequestFullscreen) modal.webkitRequestFullscreen().catch(() => {});
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  }
+};
+
+window.closeLightbox = function() {
+  stopSlideshow();
+  const modal = document.getElementById('lightbox-modal');
+  if (modal) modal.classList.remove('active');
+  if (document.fullscreenElement) {
+    document.exitFullscreen().catch(() => {});
+  }
+};
+
+// 相容舊函式
+window.openLightboxSingle = function(imgSrc, caption) {
+  const singlePhoto = [{
+    src: imgSrc,
+    title: caption || '資訊圖表',
+    stationName: '資訊圖表',
+    time: '官方教材',
+    day: '',
+    caption: caption || ''
+  }];
+  openLightboxPhoto(singlePhoto, 0);
 };
 
 window.openLightboxFromDeck = function(unitId) {
   const unit = UNITS_DATA.find(u => u.id === unitId);
   if (!unit) return;
   const cur = AppState.unitsState[unitId].currentSlide;
-  openLightboxSingle(unit.slides[cur], `${unit.title} · 投影片 ${cur + 1}`);
+  const deckList = unit.slides.map((s, i) => ({
+    src: s,
+    title: `${unit.title} · 投影片 ${i + 1} / 21`,
+    stationName: unit.tabName,
+    time: unit.date,
+    day: '',
+    caption: `第 ${i + 1} 頁教學簡報投影片內容。`
+  }));
+  openLightboxPhoto(deckList, cur);
 };
-
-function closeLightbox() {
-  const modal = document.getElementById('lightbox-modal');
-  if (modal) modal.classList.remove('active');
-}
 
 /* ==========================================================================
    全域鍵盤導航 Global Keyboard Navigation
    ========================================================================== */
 function initGlobalKeyboard() {
   document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('lightbox-modal');
+    const isLightboxActive = modal && modal.classList.contains('active');
+
     // ESC 關閉燈箱
     if (e.key === 'Escape') {
-      closeLightbox();
+      if (isLightboxActive) {
+        closeLightbox();
+        return;
+      }
+    }
+
+    // 若燈箱開啟，方向鍵切換照片，空白鍵暫停/播放，F 全螢幕
+    if (isLightboxActive) {
+      if (e.key === 'ArrowLeft') {
+        prevLightboxPhoto();
+        e.preventDefault();
+      } else if (e.key === 'ArrowRight') {
+        nextLightboxPhoto();
+        e.preventDefault();
+      } else if (e.key === ' ') {
+        toggleSlideshowPlay();
+        e.preventDefault();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleLightboxFullscreen();
+        e.preventDefault();
+      }
       return;
     }
 

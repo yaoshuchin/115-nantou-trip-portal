@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2026102603">
+  <link rel="stylesheet" href="styles.css?v=2026102604">
 </head>
 <body>
 
@@ -267,6 +267,58 @@
     </section>
 
     <!-- ----------------------------------------------------------------------
+         標籤 G：畢旅實境時光廊專區 (14 站現場紀錄 · 392 張高畫質寫真)
+         ---------------------------------------------------------------------- -->
+    <section id="tab-gallery" class="tab-panel">
+      <!-- 藝廊主橫幅 -->
+      <div class="unit-hero gallery-hero">
+        <div class="unit-meta-bar">
+          <span class="badge-tag">📸 現場實境藝廊</span>
+          <span class="badge-date">📅 115.10.20 ～ 10.23 全程紀實</span>
+          <span class="badge-date">📍 14 個分站 · 392 張現場相片</span>
+        </div>
+        <h2>南投國中 115 學年度畢業旅行 · 實境影像時光廊</h2>
+        <p>
+          完整收錄南投國中 115 學年度畢業旅行三天二夜從行前說明會、出發啟程、田寮月世界、海生館、貓鼻頭、墾丁大街、福華入住、義大世界暢玩到平安賦歸之 14 大分站 392 張現場紀實照片。每張照片均附有拍攝時間戳記與現場導覽介紹，支援分站快速切換、瀑布流預覽、高清大圖燈箱與全螢幕自動輪播播放。
+        </p>
+        <div class="gallery-hero-actions">
+          <button class="btn-deck btn-gallery-primary" onclick="startGlobalSlideshow()">
+            <span>▶️</span> 全螢幕自動輪播播放 (全部 392 張)
+          </button>
+          <button class="btn-deck" onclick="playRandomPhoto()">
+            <span>🔀</span> 隨機探索一張
+          </button>
+          <div class="gallery-view-toggle">
+            <span style="font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-right:6px;">排版模式：</span>
+            <button class="btn-privacy active" id="btn-view-masonry" onclick="setGalleryViewMode('masonry')">▦ 瀑布流排版</button>
+            <button class="btn-privacy" id="btn-view-grid" onclick="setGalleryViewMode('grid')">⊞ 緊湊圖磚</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分站快速切換與篩選器 (Station Switcher) -->
+      <div class="timeline-card gallery-filter-card">
+        <div class="unit-section-title" style="margin-top:0;">
+          <h3><span>🧭</span> 行程分站切換篩選</h3>
+          <span class="section-indicator" id="gallery-current-count-indicator">共 392 張相片</span>
+        </div>
+        <div class="gallery-stations-filter" id="gallery-stations-filter">
+          <!-- 由 app.js 動態渲染 14 個分站按鈕 -->
+        </div>
+      </div>
+
+      <!-- 當前選中站點介紹橫幅 (Station Banner) -->
+      <div id="gallery-station-banner" class="gallery-station-banner">
+        <!-- 由 app.js 動態渲染 -->
+      </div>
+
+      <!-- 瀑布流相片展示區 (Photos Grid / Masonry) -->
+      <div class="photos-masonry-grid" id="gallery-photos-container">
+        <!-- 由 app.js 動態渲染 -->
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
          標籤 1 ～ 14：14 個主題單元影音與簡報展示專區
          ---------------------------------------------------------------------- -->
     <div id="units-panels-wrapper">
@@ -276,14 +328,58 @@
   </main>
 
   <!-- ========================================================================
-       全域圖片高清放大燈箱 Lightbox Modal
+       全域圖片高清放大燈箱與全螢幕輪播器 Lightbox & Slideshow Modal
        ======================================================================== -->
   <div id="lightbox-modal" class="lightbox-modal" role="dialog" aria-modal="true">
-    <button id="lightbox-close-btn" class="lightbox-close" title="關閉燈箱 (ESC)">✕</button>
-    <div class="lightbox-img-wrap">
-      <img id="lightbox-img" src="" alt="放大圖">
+    <!-- 輪播自動倒數進度條 -->
+    <div id="lightbox-progress-bar" class="lightbox-progress-bar"></div>
+
+    <!-- 頂部控制列 -->
+    <div class="lightbox-topbar">
+      <div class="lightbox-title-group">
+        <span class="badge-tag" id="lightbox-station-tag">分站標籤</span>
+        <span class="lightbox-title-text" id="lightbox-photo-title">相片標題</span>
+        <span class="lightbox-counter" id="lightbox-counter">1 / 392</span>
+      </div>
+      <div class="lightbox-actions">
+        <button id="lightbox-autoplay-btn" class="btn-lightbox-action" onclick="toggleSlideshowPlay()" title="播放 / 暫停自動輪播 (Space)">
+          <span id="lightbox-play-icon">▶️</span> <span id="lightbox-play-text">自動輪播</span>
+        </button>
+        <select id="lightbox-speed-select" class="lightbox-speed-select" onchange="setSlideshowSpeed(this.value)" title="輪播切換速度">
+          <option value="2000">2 秒/張</option>
+          <option value="3500" selected>3.5 秒/張</option>
+          <option value="5000">5 秒/張</option>
+        </select>
+        <button id="lightbox-fullscreen-btn" class="btn-lightbox-action" onclick="toggleLightboxFullscreen()" title="全螢幕播放 (F)">
+          <span>⛶</span> 全螢幕
+        </button>
+        <button id="lightbox-close-btn" class="lightbox-close-new" onclick="closeLightbox()" title="關閉燈箱 (ESC)">✕</button>
+      </div>
     </div>
-    <div id="lightbox-caption" class="lightbox-caption"></div>
+
+    <!-- 主展示舞台 -->
+    <div class="lightbox-stage">
+      <button class="lightbox-nav-btn prev" id="lightbox-btn-prev" onclick="prevLightboxPhoto()" title="上一張 (←)">‹</button>
+      <div class="lightbox-img-wrap" id="lightbox-img-wrap">
+        <img id="lightbox-img" src="" alt="放大圖">
+      </div>
+      <button class="lightbox-nav-btn next" id="lightbox-btn-next" onclick="nextLightboxPhoto()" title="下一張 (→)">›</button>
+    </div>
+
+    <!-- 底部說明文字與縮圖列 -->
+    <div class="lightbox-bottom-drawer" id="lightbox-bottom-drawer">
+      <div class="lightbox-info-row">
+        <div class="lightbox-meta-info">
+          <span class="lightbox-time" id="lightbox-time-text">🕒 拍攝時間</span>
+          <span class="lightbox-station-name" id="lightbox-station-text">📍 所屬站點</span>
+        </div>
+        <p class="lightbox-caption-desc" id="lightbox-caption-text">現場紀實介紹文字...</p>
+      </div>
+      <!-- 底部縮圖預覽列 (Jump to Photo) -->
+      <div class="lightbox-thumbs-strip" id="lightbox-thumbs-strip">
+        <!-- 由 app.js 動態渲染 -->
+      </div>
+    </div>
   </div>
 
   <!-- ========================================================================
@@ -314,7 +410,7 @@
   </footer>
 
   <!-- 載入資料庫與主腳本 -->
-  <script src="data.js?v=2026102603"></script>
-  <script src="app.js?v=2026102603"></script>
+  <script src="data.js?v=2026102604"></script>
+  <script src="app.js?v=2026102604"></script>
 </body>
 </html>
