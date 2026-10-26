@@ -103,8 +103,8 @@ const TRIP_DATA = {
       countDetail: "904: 男10 女9 (19人)",
       totalStudents: 19,
       chaperones: [
-        { role: "學務主任", name: "董O遠" },
-        { role: "904 導師", name: "蔡O秀", note: "素食・眷屬隨行" }
+        { role: "學務主任", name: "董OO" },
+        { role: "904 導師", name: "蔡OO", note: "素食・眷屬隨行" }
       ],
       vegCount: 1
     },
@@ -115,8 +115,8 @@ const TRIP_DATA = {
       countDetail: "901: 男11 女8 (19人) | 902: 男4 女7 (11人)",
       totalStudents: 30,
       chaperones: [
-        { role: "901 導師", name: "吳O萱" },
-        { role: "902 導師", name: "黃O英" }
+        { role: "901 導師", name: "吳OO" },
+        { role: "902 導師", name: "黃OO" }
       ],
       vegCount: 0
     },
@@ -127,7 +127,7 @@ const TRIP_DATA = {
       countDetail: "903: 男11 女12 (23人) | 902: 男4 女4 (8人)",
       totalStudents: 31,
       chaperones: [
-        { role: "903 導師", name: "陳O綸" }
+        { role: "903 導師", name: "陳OO" }
       ],
       vegCount: 0
     },
@@ -138,7 +138,7 @@ const TRIP_DATA = {
       countDetail: "905: 男11 女10 (21人)",
       totalStudents: 21,
       chaperones: [
-        { role: "905 導師", name: "施O婷" }
+        { role: "905 導師", name: "施OO" }
       ],
       vegCount: 0
     },
@@ -149,7 +149,7 @@ const TRIP_DATA = {
       countDetail: "906: 男13 女11 (24人)",
       totalStudents: 24,
       chaperones: [
-        { role: "906 導師", name: "石O洋" }
+        { role: "906 導師", name: "石OO" }
       ],
       vegCount: 0
     },
@@ -160,8 +160,8 @@ const TRIP_DATA = {
       countDetail: "907: 男11 女11 (22人) | 908: 男6 女3 (9人)",
       totalStudents: 31,
       chaperones: [
-        { role: "907 導師", name: "孫O惠" },
-        { role: "908 導師", name: "李O嘉" }
+        { role: "907 導師", name: "孫OO" },
+        { role: "908 導師", name: "李OO" }
       ],
       vegCount: 0
     },
@@ -172,225 +172,225 @@ const TRIP_DATA = {
       countDetail: "909: 男10 女12 (22人)",
       totalStudents: 22,
       chaperones: [
-        { role: "訓育組長", name: "姚O勤" },
-        { role: "909 導師", name: "黃O姿" }
+        { role: "訓育組長", name: "姚OO" },
+        { role: "909 導師", name: "黃OO" }
       ],
       vegCount: 1
     }
   ],
 
   teachers: [
-    { role: "校長", name: "劉O彥", bus: "公務安排", roomDay1: "－", roomDay2: "746 (單/雙人)", note: "10/22 進駐天悅" },
-    { role: "學務主任", name: "董O遠", bus: 1, roomDay1: "4056 (福華)", roomDay2: "747 (天悅)", note: "隨車 1 車" },
-    { role: "902 導師", name: "黃O英", bus: 2, roomDay1: "4058 (福華)", roomDay2: "748 (天悅)", note: "隨車 2 車" },
-    { role: "908 導師", name: "李O嘉", bus: 6, roomDay1: "4060 (福華)", roomDay2: "750 (天悅)", note: "隨車 6 車" },
-    { role: "訓育組長", name: "姚O勤", bus: 7, roomDay1: "3058 (福華)", roomDay2: "740 (天悅)", note: "隨車 7 車（與蔡O秀老師同房）" },
-    { role: "904 導師", name: "蔡O秀", bus: 1, roomDay1: "3058 (福華)", roomDay2: "740 (天悅)", note: "隨車 1 車（素食、眷屬同房）" },
-    { role: "907 導師", name: "孫O惠", bus: 6, roomDay1: "3060 (福華)", roomDay2: "742 (天悅)", note: "隨車 6 車（與黃O姿老師同房）" },
-    { role: "909 導師", name: "黃O姿", bus: 7, roomDay1: "3060 (福華)", roomDay2: "742 (天悅)", note: "隨車 7 車" },
-    { role: "906 導師", name: "石O洋", bus: 5, roomDay1: "3062 (福華)", roomDay2: "752 (天悅)", note: "隨車 5 車（與施O婷老師同房區）" },
-    { role: "905 導師", name: "施O婷", bus: 4, roomDay1: "3062 (福華)", roomDay2: "752 (天悅)", note: "隨車 4 車" },
-    { role: "901 導師", name: "吳O萱", bus: 2, roomDay1: "3064 (福華)", roomDay2: "756 (天悅)", note: "隨車 2 車（與陳O綸老師同房區）" },
-    { role: "903 導師", name: "陳O綸", bus: 3, roomDay1: "3064 (福華)", roomDay2: "756 (天悅)", note: "隨車 3 車" }
+    { role: "校長", name: "劉OO", bus: "公務安排", roomDay1: "－", roomDay2: "746 (單/雙人)", note: "10/22 進駐天悅" },
+    { role: "學務主任", name: "董OO", bus: 1, roomDay1: "4056 (福華)", roomDay2: "747 (天悅)", note: "隨車 1 車" },
+    { role: "902 導師", name: "黃OO", bus: 2, roomDay1: "4058 (福華)", roomDay2: "748 (天悅)", note: "隨車 2 車" },
+    { role: "908 導師", name: "李OO", bus: 6, roomDay1: "4060 (福華)", roomDay2: "750 (天悅)", note: "隨車 6 車" },
+    { role: "訓育組長", name: "姚OO", bus: 7, roomDay1: "3058 (福華)", roomDay2: "740 (天悅)", note: "隨車 7 車（與蔡OO老師同房）" },
+    { role: "904 導師", name: "蔡OO", bus: 1, roomDay1: "3058 (福華)", roomDay2: "740 (天悅)", note: "隨車 1 車（素食、眷屬同房）" },
+    { role: "907 導師", name: "孫OO", bus: 6, roomDay1: "3060 (福華)", roomDay2: "742 (天悅)", note: "隨車 6 車（與黃OO老師同房）" },
+    { role: "909 導師", name: "黃OO", bus: 7, roomDay1: "3060 (福華)", roomDay2: "742 (天悅)", note: "隨車 7 車" },
+    { role: "906 導師", name: "石OO", bus: 5, roomDay1: "3062 (福華)", roomDay2: "752 (天悅)", note: "隨車 5 車（與施OO老師同房區）" },
+    { role: "905 導師", name: "施OO", bus: 4, roomDay1: "3062 (福華)", roomDay2: "752 (天悅)", note: "隨車 4 車" },
+    { role: "901 導師", name: "吳OO", bus: 2, roomDay1: "3064 (福華)", roomDay2: "756 (天悅)", note: "隨車 2 車（與陳OO老師同房區）" },
+    { role: "903 導師", name: "陳OO", bus: 3, roomDay1: "3064 (福華)", roomDay2: "756 (天悅)", note: "隨車 3 車" }
   ],
 
   // 178名學生名冊
   students: [
     // 901
-    { name: "簡O翔", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "501", note: "" },
-    { name: "簡O錤", class: "901", gender: "男", bus: 2, room1: "2141", table1: "2", room2: "501", note: "" },
-    { name: "賴O育", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "501", note: "" },
-    { name: "楊O翰", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "503", note: "" },
-    { name: "鄒O陞", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "501", note: "" },
-    { name: "廖O豪", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "503", note: "" },
-    { name: "吳O成", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "502", note: "" },
-    { name: "林O紘", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "502", note: "" },
-    { name: "陳O潾", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "502", note: "" },
-    { name: "陳O宥", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "503", note: "" },
-    { name: "黃O榤", class: "901", gender: "男", bus: 2, room1: "2142", table1: "1", room2: "502", note: "" },
-    { name: "林O汝", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
-    { name: "賴O羽", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
-    { name: "劉O妤", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
-    { name: "鄧O云", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
-    { name: "田O羽", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
-    { name: "朱O融", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
-    { name: "陳O涵", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
-    { name: "陳O妡", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
+    { name: "簡OO", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "501", note: "" },
+    { name: "簡OO", class: "901", gender: "男", bus: 2, room1: "2141", table1: "2", room2: "501", note: "" },
+    { name: "賴OO", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "501", note: "" },
+    { name: "楊OO", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "503", note: "" },
+    { name: "鄒OO", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "501", note: "" },
+    { name: "廖OO", class: "901", gender: "男", bus: 2, room1: "2141", table1: "1", room2: "503", note: "" },
+    { name: "吳OO", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "502", note: "" },
+    { name: "林OO", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "502", note: "" },
+    { name: "陳OO", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "502", note: "" },
+    { name: "陳OO", class: "901", gender: "男", bus: 2, room1: "2142", table1: "2", room2: "503", note: "" },
+    { name: "黃OO", class: "901", gender: "男", bus: 2, room1: "2142", table1: "1", room2: "502", note: "" },
+    { name: "林OO", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
+    { name: "賴OO", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
+    { name: "劉OO", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
+    { name: "鄧OO", class: "901", gender: "女", bus: 2, room1: "3082", table1: "1", room2: "546", note: "" },
+    { name: "田OO", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
+    { name: "朱OO", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
+    { name: "陳OO", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
+    { name: "陳OO", class: "901", gender: "女", bus: 2, room1: "3084", table1: "2", room2: "547", note: "" },
 
     // 902
-    { name: "古O弘", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "509", note: "" },
-    { name: "黃O翊", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "511", note: "" },
-    { name: "楊O正", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "511", note: "" },
-    { name: "楊O傑", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "509", note: "" },
-    { name: "吳O億", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "509", note: "" },
-    { name: "王O群", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "511", note: "" },
-    { name: "陳O祺", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "511", note: "" },
-    { name: "楊O諺", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "509", note: "" },
-    { name: "吳O霏", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
-    { name: "沈O語", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
-    { name: "林O安", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
-    { name: "張O瑄", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
-    { name: "陳O蒨", class: "902", gender: "女", bus: 2, room1: "3033", table1: "4", room2: "549", note: "" },
-    { name: "陳O潔", class: "902", gender: "女", bus: 2, room1: "3033", table1: "4", room2: "549", note: "" },
-    { name: "鄒O璇", class: "902", gender: "女", bus: 2, room1: "3033", table1: "4", room2: "549", note: "" },
-    { name: "歐O臻", class: "902", gender: "女", bus: 3, room1: "3033", table1: "4", room2: "549", note: "" },
-    { name: "王O恩", class: "902", gender: "女", bus: 3, room1: "3035", table1: "3", room2: "550", note: "" },
-    { name: "劉O圻", class: "902", gender: "女", bus: 3, room1: "3035", table1: "4", room2: "550", note: "" },
-    { name: "蔡O喬", class: "902", gender: "女", bus: 3, room1: "3035", table1: "4", room2: "550", note: "" },
+    { name: "古OO", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "509", note: "" },
+    { name: "黃OO", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "511", note: "" },
+    { name: "楊OO", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "511", note: "" },
+    { name: "楊OO", class: "902", gender: "男", bus: 2, room1: "2122", table1: "3", room2: "509", note: "" },
+    { name: "吳OO", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "509", note: "" },
+    { name: "王OO", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "511", note: "" },
+    { name: "陳OO", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "511", note: "" },
+    { name: "楊OO", class: "902", gender: "男", bus: 3, room1: "2123", table1: "3", room2: "509", note: "" },
+    { name: "吳OO", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
+    { name: "沈OO", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
+    { name: "林OO", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
+    { name: "張OO", class: "902", gender: "女", bus: 2, room1: "3031", table1: "4", room2: "548", note: "" },
+    { name: "陳OO", class: "902", gender: "女", bus: 2, room1: "3033", table1: "4", room2: "549", note: "" },
+    { name: "陳OO", class: "902", gender: "女", bus: 2, room1: "3033", table1: "4", room2: "549", note: "" },
+    { name: "鄒OO", class: "902", gender: "女", bus: 2, room1: "3033", table1: "4", room2: "549", note: "" },
+    { name: "歐OO", class: "902", gender: "女", bus: 3, room1: "3033", table1: "4", room2: "549", note: "" },
+    { name: "王OO", class: "902", gender: "女", bus: 3, room1: "3035", table1: "3", room2: "550", note: "" },
+    { name: "劉OO", class: "902", gender: "女", bus: 3, room1: "3035", table1: "4", room2: "550", note: "" },
+    { name: "蔡OO", class: "902", gender: "女", bus: 3, room1: "3035", table1: "4", room2: "550", note: "" },
 
     // 903
-    { name: "施O佑", class: "903", gender: "男", bus: 3, room1: "2137", table1: "6", room2: "516", note: "" },
-    { name: "陳O侑", class: "903", gender: "男", bus: 3, room1: "2137", table1: "6", room2: "516", note: "" },
-    { name: "廖O鈞", class: "903", gender: "男", bus: 3, room1: "2137", table1: "6", room2: "516", note: "" },
-    { name: "蔡O君", class: "903", gender: "男", bus: 3, room1: "2124", table1: "7", room2: "512", note: "" },
-    { name: "張O煒", class: "903", gender: "男", bus: 3, room1: "2124", table1: "6", room2: "512", note: "" },
-    { name: "陳O潣", class: "903", gender: "男", bus: 3, room1: "2124", table1: "6", room2: "512", note: "" },
-    { name: "黃O鈞", class: "903", gender: "男", bus: 3, room1: "2124", table1: "7", room2: "512", note: "" },
-    { name: "簡O霖", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
-    { name: "曾O智", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
-    { name: "施O圻", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
-    { name: "洪O彬", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
-    { name: "林O儒", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
-    { name: "張O禎", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
-    { name: "楊O頵", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
-    { name: "蕭O瑩", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
-    { name: "朱O芯", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
-    { name: "賴O如", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
-    { name: "廖O霓", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
-    { name: "彭O璇", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
-    { name: "林O玫", class: "903", gender: "女", bus: 3, room1: "3070", table1: "5", room2: "543", note: "" },
-    { name: "簡O鎣", class: "903", gender: "女", bus: 3, room1: "3070", table1: "6", room2: "543", note: "" },
-    { name: "程O玹", class: "903", gender: "女", bus: 3, room1: "3070", table1: "5", room2: "543", note: "" },
-    { name: "葉O瑄", class: "903", gender: "女", bus: 3, room1: "3070", table1: "6", room2: "543", note: "" },
+    { name: "施OO", class: "903", gender: "男", bus: 3, room1: "2137", table1: "6", room2: "516", note: "" },
+    { name: "陳OO", class: "903", gender: "男", bus: 3, room1: "2137", table1: "6", room2: "516", note: "" },
+    { name: "廖OO", class: "903", gender: "男", bus: 3, room1: "2137", table1: "6", room2: "516", note: "" },
+    { name: "蔡OO", class: "903", gender: "男", bus: 3, room1: "2124", table1: "7", room2: "512", note: "" },
+    { name: "張OO", class: "903", gender: "男", bus: 3, room1: "2124", table1: "6", room2: "512", note: "" },
+    { name: "陳OO", class: "903", gender: "男", bus: 3, room1: "2124", table1: "6", room2: "512", note: "" },
+    { name: "黃OO", class: "903", gender: "男", bus: 3, room1: "2124", table1: "7", room2: "512", note: "" },
+    { name: "簡OO", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
+    { name: "曾OO", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
+    { name: "施OO", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
+    { name: "洪OO", class: "903", gender: "男", bus: 3, room1: "2125", table1: "5", room2: "515", note: "" },
+    { name: "林OO", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
+    { name: "張OO", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
+    { name: "楊OO", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
+    { name: "蕭OO", class: "903", gender: "女", bus: 3, room1: "3056", table1: "5", room2: "540", note: "" },
+    { name: "朱OO", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
+    { name: "賴OO", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
+    { name: "廖OO", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
+    { name: "彭OO", class: "903", gender: "女", bus: 3, room1: "3068", table1: "6", room2: "542", note: "" },
+    { name: "林OO", class: "903", gender: "女", bus: 3, room1: "3070", table1: "5", room2: "543", note: "" },
+    { name: "簡OO", class: "903", gender: "女", bus: 3, room1: "3070", table1: "6", room2: "543", note: "" },
+    { name: "程OO", class: "903", gender: "女", bus: 3, room1: "3070", table1: "5", room2: "543", note: "" },
+    { name: "葉OO", class: "903", gender: "女", bus: 3, room1: "3070", table1: "6", room2: "543", note: "" },
 
     // 904
-    { name: "王O億", class: "904", gender: "男", bus: 1, room1: "2135", table1: "8", room2: "517", note: "" },
-    { name: "石O愷", class: "904", gender: "男", bus: 1, room1: "2135", table1: "8", room2: "517", note: "" },
-    { name: "林O羽", class: "904", gender: "男", bus: 1, room1: "2135", table1: "7", room2: "518", note: "" },
-    { name: "姚O城", class: "904", gender: "男", bus: 1, room1: "2135", table1: "素", room2: "516", note: "素食" },
-    { name: "羅O鈞", class: "904", gender: "男", bus: 1, room1: "2135", table1: "8", room2: "517", note: "" },
+    { name: "王OO", class: "904", gender: "男", bus: 1, room1: "2135", table1: "8", room2: "517", note: "" },
+    { name: "石OO", class: "904", gender: "男", bus: 1, room1: "2135", table1: "8", room2: "517", note: "" },
+    { name: "林OO", class: "904", gender: "男", bus: 1, room1: "2135", table1: "7", room2: "518", note: "" },
+    { name: "姚OO", class: "904", gender: "男", bus: 1, room1: "2135", table1: "素", room2: "516", note: "素食" },
+    { name: "羅OO", class: "904", gender: "男", bus: 1, room1: "2135", table1: "8", room2: "517", note: "" },
     { name: "王O", class: "904", gender: "男", bus: 1, room1: "2135", table1: "8", room2: "517", note: "" },
-    { name: "許O崴", class: "904", gender: "男", bus: 1, room1: "2126", table1: "7", room2: "518", note: "" },
-    { name: "蔡O緯", class: "904", gender: "男", bus: 1, room1: "2126", table1: "7", room2: "518", note: "" },
-    { name: "鄧O康", class: "904", gender: "男", bus: 1, room1: "2126", table1: "8", room2: "519", note: "" },
-    { name: "鍾O洧", class: "904", gender: "男", bus: 1, room1: "2126", table1: "7", room2: "518", note: "" },
-    { name: "王O茹", class: "904", gender: "女", bus: 1, room1: "3072", table1: "8", room2: "561", note: "" },
-    { name: "翁O涵", class: "904", gender: "女", bus: 1, room1: "3072", table1: "8", room2: "561", note: "" },
-    { name: "黃O芳", class: "904", gender: "女", bus: 1, room1: "3072", table1: "7", room2: "561", note: "" },
-    { name: "胡O紜", class: "904", gender: "女", bus: 1, room1: "3072", table1: "7", room2: "561", note: "" },
-    { name: "林O妮", class: "904", gender: "女", bus: 1, room1: "3074", table1: "8", room2: "562", note: "" },
-    { name: "蔡O霏", class: "904", gender: "女", bus: 1, room1: "3074", table1: "7", room2: "562", note: "" },
-    { name: "謝O倢", class: "904", gender: "女", bus: 1, room1: "3074", table1: "7", room2: "562", note: "" },
-    { name: "藍O媗", class: "904", gender: "女", bus: 1, room1: "3074", table1: "8", room2: "562", note: "" },
-    { name: "黎O蓉", class: "904", gender: "女", bus: 1, room1: "3076", table1: "8", room2: "560", note: "" },
+    { name: "許OO", class: "904", gender: "男", bus: 1, room1: "2126", table1: "7", room2: "518", note: "" },
+    { name: "蔡OO", class: "904", gender: "男", bus: 1, room1: "2126", table1: "7", room2: "518", note: "" },
+    { name: "鄧OO", class: "904", gender: "男", bus: 1, room1: "2126", table1: "8", room2: "519", note: "" },
+    { name: "鍾OO", class: "904", gender: "男", bus: 1, room1: "2126", table1: "7", room2: "518", note: "" },
+    { name: "王OO", class: "904", gender: "女", bus: 1, room1: "3072", table1: "8", room2: "561", note: "" },
+    { name: "翁OO", class: "904", gender: "女", bus: 1, room1: "3072", table1: "8", room2: "561", note: "" },
+    { name: "黃OO", class: "904", gender: "女", bus: 1, room1: "3072", table1: "7", room2: "561", note: "" },
+    { name: "胡OO", class: "904", gender: "女", bus: 1, room1: "3072", table1: "7", room2: "561", note: "" },
+    { name: "林OO", class: "904", gender: "女", bus: 1, room1: "3074", table1: "8", room2: "562", note: "" },
+    { name: "蔡OO", class: "904", gender: "女", bus: 1, room1: "3074", table1: "7", room2: "562", note: "" },
+    { name: "謝OO", class: "904", gender: "女", bus: 1, room1: "3074", table1: "7", room2: "562", note: "" },
+    { name: "藍OO", class: "904", gender: "女", bus: 1, room1: "3074", table1: "8", room2: "562", note: "" },
+    { name: "黎OO", class: "904", gender: "女", bus: 1, room1: "3076", table1: "8", room2: "560", note: "" },
 
     // 905
-    { name: "湯O綸", class: "905", gender: "男", bus: 4, room1: "2137", table1: "10", room2: "519", note: "" },
-    { name: "蕭O均", class: "905", gender: "男", bus: 4, room1: "2137", table1: "10", room2: "519", note: "" },
-    { name: "簡O鈞", class: "905", gender: "男", bus: 4, room1: "2137", table1: "10", room2: "519", note: "" },
-    { name: "熊O捷", class: "905", gender: "男", bus: 4, room1: "2127", table1: "9", room2: "520", note: "" },
-    { name: "林O穎", class: "905", gender: "男", bus: 4, room1: "2127", table1: "9", room2: "520", note: "" },
-    { name: "林O弘", class: "905", gender: "男", bus: 4, room1: "2127", table1: "9", room2: "520", note: "" },
-    { name: "羅O惟", class: "905", gender: "男", bus: 4, room1: "2127", table1: "10", room2: "520", note: "" },
-    { name: "陳O璋", class: "905", gender: "男", bus: 4, room1: "2128", table1: "9", room2: "521", note: "" },
-    { name: "陳O佑", class: "905", gender: "男", bus: 4, room1: "2128", table1: "9", room2: "521", note: "" },
-    { name: "楊O樺", class: "905", gender: "男", bus: 4, room1: "2128", table1: "10", room2: "521", note: "" },
-    { name: "葉O修", class: "905", gender: "男", bus: 4, room1: "2128", table1: "10", room2: "521", note: "" },
-    { name: "林O婕", class: "905", gender: "女", bus: 4, room1: "3041", table1: "9", room2: "553", note: "" },
-    { name: "林O慧", class: "905", gender: "女", bus: 4, room1: "3041", table1: "9", room2: "553", note: "" },
-    { name: "廖O玉", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
-    { name: "張O涵", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
-    { name: "張O潼", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
-    { name: "曾O瑜", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
-    { name: "谷O愛", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
-    { name: "林O渝", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
-    { name: "黃O蓉", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
-    { name: "廖O涵", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
+    { name: "湯OO", class: "905", gender: "男", bus: 4, room1: "2137", table1: "10", room2: "519", note: "" },
+    { name: "蕭OO", class: "905", gender: "男", bus: 4, room1: "2137", table1: "10", room2: "519", note: "" },
+    { name: "簡OO", class: "905", gender: "男", bus: 4, room1: "2137", table1: "10", room2: "519", note: "" },
+    { name: "熊OO", class: "905", gender: "男", bus: 4, room1: "2127", table1: "9", room2: "520", note: "" },
+    { name: "林OO", class: "905", gender: "男", bus: 4, room1: "2127", table1: "9", room2: "520", note: "" },
+    { name: "林OO", class: "905", gender: "男", bus: 4, room1: "2127", table1: "9", room2: "520", note: "" },
+    { name: "羅OO", class: "905", gender: "男", bus: 4, room1: "2127", table1: "10", room2: "520", note: "" },
+    { name: "陳OO", class: "905", gender: "男", bus: 4, room1: "2128", table1: "9", room2: "521", note: "" },
+    { name: "陳OO", class: "905", gender: "男", bus: 4, room1: "2128", table1: "9", room2: "521", note: "" },
+    { name: "楊OO", class: "905", gender: "男", bus: 4, room1: "2128", table1: "10", room2: "521", note: "" },
+    { name: "葉OO", class: "905", gender: "男", bus: 4, room1: "2128", table1: "10", room2: "521", note: "" },
+    { name: "林OO", class: "905", gender: "女", bus: 4, room1: "3041", table1: "9", room2: "553", note: "" },
+    { name: "林OO", class: "905", gender: "女", bus: 4, room1: "3041", table1: "9", room2: "553", note: "" },
+    { name: "廖OO", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
+    { name: "張OO", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
+    { name: "張OO", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
+    { name: "曾OO", class: "905", gender: "女", bus: 4, room1: "3043", table1: "10", room2: "555", note: "" },
+    { name: "谷OO", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
+    { name: "林OO", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
+    { name: "黃OO", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
+    { name: "廖OO", class: "905", gender: "女", bus: 4, room1: "3045", table1: "9", room2: "556", note: "" },
 
     // 906
-    { name: "王O倫", class: "906", gender: "男", bus: 5, room1: "2138", table1: "18", room2: "523", note: "" },
-    { name: "吳O彥", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
-    { name: "張O昕", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
-    { name: "張O璽", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
-    { name: "黃O翰", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
-    { name: "黃O程", class: "906", gender: "男", bus: 5, room1: "2138", table1: "18", room2: "523", note: "" },
-    { name: "黃O揚", class: "906", gender: "男", bus: 5, room1: "2139", table1: "11", room2: "526", note: "" },
-    { name: "陳O聖", class: "906", gender: "男", bus: 5, room1: "2139", table1: "18", room2: "523", note: "" },
-    { name: "邱O辰", class: "906", gender: "男", bus: 5, room1: "2139", table1: "18", room2: "523", note: "" },
-    { name: "陳O廷", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
-    { name: "蔡O哲", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
-    { name: "蕭O堯", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
-    { name: "鄒O丞", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
-    { name: "張O芸", class: "906", gender: "女", bus: 5, room1: "3035", table1: "11", room2: "550", note: "" },
-    { name: "張O卉", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
-    { name: "郭O瑄", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
-    { name: "黃O誼", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
-    { name: "黃O貽", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
-    { name: "簡O涵", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "552", note: "" },
-    { name: "許O慈", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "552", note: "" },
-    { name: "陳O樂", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "553", note: "" },
-    { name: "王O文", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "552", note: "" },
-    { name: "簡O霓", class: "906", gender: "女", bus: 5, room1: "3041", table1: "12", room2: "553", note: "" },
-    { name: "林O甄", class: "906", gender: "女", bus: 5, room1: "3041", table1: "12", room2: "552", note: "" },
+    { name: "王OO", class: "906", gender: "男", bus: 5, room1: "2138", table1: "18", room2: "523", note: "" },
+    { name: "吳OO", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
+    { name: "張OO", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
+    { name: "張OO", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
+    { name: "黃OO", class: "906", gender: "男", bus: 5, room1: "2138", table1: "11", room2: "525", note: "" },
+    { name: "黃OO", class: "906", gender: "男", bus: 5, room1: "2138", table1: "18", room2: "523", note: "" },
+    { name: "黃OO", class: "906", gender: "男", bus: 5, room1: "2139", table1: "11", room2: "526", note: "" },
+    { name: "陳OO", class: "906", gender: "男", bus: 5, room1: "2139", table1: "18", room2: "523", note: "" },
+    { name: "邱OO", class: "906", gender: "男", bus: 5, room1: "2139", table1: "18", room2: "523", note: "" },
+    { name: "陳OO", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
+    { name: "蔡OO", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
+    { name: "蕭OO", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
+    { name: "鄒OO", class: "906", gender: "男", bus: 5, room1: "2129", table1: "12", room2: "522", note: "" },
+    { name: "張OO", class: "906", gender: "女", bus: 5, room1: "3035", table1: "11", room2: "550", note: "" },
+    { name: "張OO", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
+    { name: "郭OO", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
+    { name: "黃OO", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
+    { name: "黃OO", class: "906", gender: "女", bus: 5, room1: "3037", table1: "11", room2: "551", note: "" },
+    { name: "簡OO", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "552", note: "" },
+    { name: "許OO", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "552", note: "" },
+    { name: "陳OO", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "553", note: "" },
+    { name: "王OO", class: "906", gender: "女", bus: 5, room1: "3039", table1: "12", room2: "552", note: "" },
+    { name: "簡OO", class: "906", gender: "女", bus: 5, room1: "3041", table1: "12", room2: "553", note: "" },
+    { name: "林OO", class: "906", gender: "女", bus: 5, room1: "3041", table1: "12", room2: "552", note: "" },
 
     // 907
-    { name: "金O賢", class: "907", gender: "男", bus: 6, room1: "2139", table1: "14", room2: "526", note: "" },
-    { name: "張O二", class: "907", gender: "男", bus: 6, room1: "2139", table1: "14", room2: "526", note: "" },
-    { name: "廖O豐", class: "907", gender: "男", bus: 6, room1: "2139", table1: "14", room2: "526", note: "" },
-    { name: "莊O瑄", class: "907", gender: "男", bus: 6, room1: "2130", table1: "13", room2: "527", note: "" },
-    { name: "張O湋", class: "907", gender: "男", bus: 6, room1: "2130", table1: "13", room2: "527", note: "" },
-    { name: "陳O劭", class: "907", gender: "男", bus: 6, room1: "2130", table1: "14", room2: "527", note: "" },
-    { name: "王O豐", class: "907", gender: "男", bus: 6, room1: "2130", table1: "14", room2: "527", note: "" },
-    { name: "松O樂", class: "907", gender: "男", bus: 6, room1: "2131", table1: "14", room2: "529", note: "" },
-    { name: "陳O陞", class: "907", gender: "男", bus: 6, room1: "2131", table1: "13", room2: "529", note: "" },
-    { name: "蔡O璟", class: "907", gender: "男", bus: 6, room1: "2131", table1: "13", room2: "529", note: "" },
-    { name: "謝O佑", class: "907", gender: "男", bus: 6, room1: "2131", table1: "13", room2: "529", note: "" },
-    { name: "楊O沛", class: "907", gender: "女", bus: 6, room1: "3076", table1: "13", room2: "560", note: "" },
-    { name: "林O琪", class: "907", gender: "女", bus: 6, room1: "3076", table1: "13", room2: "560", note: "" },
-    { name: "侯O晴", class: "907", gender: "女", bus: 6, room1: "3076", table1: "14", room2: "560", note: "" },
-    { name: "林O妤", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
-    { name: "胡O愛", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
-    { name: "張O穎", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
-    { name: "曾O婕", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
-    { name: "徐O禕", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
-    { name: "許O萱", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
-    { name: "劉O芹", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
-    { name: "林O鈺", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
+    { name: "金OO", class: "907", gender: "男", bus: 6, room1: "2139", table1: "14", room2: "526", note: "" },
+    { name: "張OO", class: "907", gender: "男", bus: 6, room1: "2139", table1: "14", room2: "526", note: "" },
+    { name: "廖OO", class: "907", gender: "男", bus: 6, room1: "2139", table1: "14", room2: "526", note: "" },
+    { name: "莊OO", class: "907", gender: "男", bus: 6, room1: "2130", table1: "13", room2: "527", note: "" },
+    { name: "張OO", class: "907", gender: "男", bus: 6, room1: "2130", table1: "13", room2: "527", note: "" },
+    { name: "陳OO", class: "907", gender: "男", bus: 6, room1: "2130", table1: "14", room2: "527", note: "" },
+    { name: "王OO", class: "907", gender: "男", bus: 6, room1: "2130", table1: "14", room2: "527", note: "" },
+    { name: "松OO", class: "907", gender: "男", bus: 6, room1: "2131", table1: "14", room2: "529", note: "" },
+    { name: "陳OO", class: "907", gender: "男", bus: 6, room1: "2131", table1: "13", room2: "529", note: "" },
+    { name: "蔡OO", class: "907", gender: "男", bus: 6, room1: "2131", table1: "13", room2: "529", note: "" },
+    { name: "謝OO", class: "907", gender: "男", bus: 6, room1: "2131", table1: "13", room2: "529", note: "" },
+    { name: "楊OO", class: "907", gender: "女", bus: 6, room1: "3076", table1: "13", room2: "560", note: "" },
+    { name: "林OO", class: "907", gender: "女", bus: 6, room1: "3076", table1: "13", room2: "560", note: "" },
+    { name: "侯OO", class: "907", gender: "女", bus: 6, room1: "3076", table1: "14", room2: "560", note: "" },
+    { name: "林OO", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
+    { name: "胡OO", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
+    { name: "張OO", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
+    { name: "曾OO", class: "907", gender: "女", bus: 6, room1: "3078", table1: "13", room2: "557", note: "" },
+    { name: "徐OO", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
+    { name: "許OO", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
+    { name: "劉OO", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
+    { name: "林OO", class: "907", gender: "女", bus: 6, room1: "3080", table1: "14", room2: "559", note: "" },
 
     // 908
-    { name: "王O陞", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "506", note: "" },
-    { name: "楊O旭", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
-    { name: "陳O霈", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "506", note: "" },
-    { name: "陳O霆", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
-    { name: "林O鋮", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
-    { name: "林O稷", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
-    { name: "阮O雲", class: "908", gender: "女", bus: 6, room1: "4084", table1: "15", room2: "545", note: "" },
-    { name: "連O瑆", class: "908", gender: "女", bus: 6, room1: "4084", table1: "15", room2: "545", note: "" },
-    { name: "曾O淯", class: "908", gender: "女", bus: 6, room1: "4084", table1: "15", room2: "545", note: "" },
+    { name: "王OO", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "506", note: "" },
+    { name: "楊OO", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
+    { name: "陳OO", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "506", note: "" },
+    { name: "陳OO", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
+    { name: "林OO", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
+    { name: "林OO", class: "908", gender: "男", bus: 6, room1: "2140", table1: "15", room2: "505", note: "" },
+    { name: "阮OO", class: "908", gender: "女", bus: 6, room1: "4084", table1: "15", room2: "545", note: "" },
+    { name: "連OO", class: "908", gender: "女", bus: 6, room1: "4084", table1: "15", room2: "545", note: "" },
+    { name: "曾OO", class: "908", gender: "女", bus: 6, room1: "4084", table1: "15", room2: "545", note: "" },
 
     // 909
-    { name: "簡O辰", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "508", note: "" },
-    { name: "王O恩", class: "909", gender: "男", bus: 7, room1: "2133", table1: "17", room2: "506", note: "" },
-    { name: "李O逸", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "506", note: "" },
-    { name: "林O德", class: "909", gender: "男", bus: 7, room1: "2133", table1: "素", room2: "508", note: "素食" },
-    { name: "陳O儒", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "508", note: "" },
-    { name: "張O峻", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "508", note: "" },
-    { name: "吳O浩", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
-    { name: "吳O漳", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
-    { name: "李O諺", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
-    { name: "林O翔", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
-    { name: "姚O慈", class: "909", gender: "女", bus: 7, room1: "2085", table1: "16", room2: "563", note: "" },
-    { name: "張O軒", class: "909", gender: "女", bus: 7, room1: "2085", table1: "16", room2: "563", note: "" },
-    { name: "許O羽", class: "909", gender: "女", bus: 7, room1: "2085", table1: "16", room2: "563", note: "" },
-    { name: "藍O琳", class: "909", gender: "女", bus: 7, room1: "2085", table1: "17", room2: "563", note: "" },
-    { name: "林O琪", class: "909", gender: "女", bus: 7, room1: "2086", table1: "17", room2: "565", note: "" },
-    { name: "張O寗", class: "909", gender: "女", bus: 7, room1: "2086", table1: "18", room2: "565", note: "" },
-    { name: "陳O彤", class: "909", gender: "女", bus: 7, room1: "2086", table1: "16", room2: "565", note: "" },
-    { name: "蔡O妍", class: "909", gender: "女", bus: 7, room1: "2086", table1: "16", room2: "565", note: "" },
-    { name: "何O瑜", class: "909", gender: "女", bus: 7, room1: "2120", table1: "17", room2: "566", note: "" },
-    { name: "林O萱", class: "909", gender: "女", bus: 7, room1: "2120", table1: "16", room2: "566", note: "" },
-    { name: "林O褕", class: "909", gender: "女", bus: 7, room1: "2120", table1: "17", room2: "566", note: "" },
-    { name: "林O婕", class: "909", gender: "女", bus: 7, room1: "2120", table1: "17", room2: "566", note: "" }
+    { name: "簡OO", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "508", note: "" },
+    { name: "王OO", class: "909", gender: "男", bus: 7, room1: "2133", table1: "17", room2: "506", note: "" },
+    { name: "李OO", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "506", note: "" },
+    { name: "林OO", class: "909", gender: "男", bus: 7, room1: "2133", table1: "素", room2: "508", note: "素食" },
+    { name: "陳OO", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "508", note: "" },
+    { name: "張OO", class: "909", gender: "男", bus: 7, room1: "2133", table1: "16", room2: "508", note: "" },
+    { name: "吳OO", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
+    { name: "吳OO", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
+    { name: "李OO", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
+    { name: "林OO", class: "909", gender: "男", bus: 7, room1: "2132", table1: "17", room2: "507", note: "" },
+    { name: "姚OO", class: "909", gender: "女", bus: 7, room1: "2085", table1: "16", room2: "563", note: "" },
+    { name: "張OO", class: "909", gender: "女", bus: 7, room1: "2085", table1: "16", room2: "563", note: "" },
+    { name: "許OO", class: "909", gender: "女", bus: 7, room1: "2085", table1: "16", room2: "563", note: "" },
+    { name: "藍OO", class: "909", gender: "女", bus: 7, room1: "2085", table1: "17", room2: "563", note: "" },
+    { name: "林OO", class: "909", gender: "女", bus: 7, room1: "2086", table1: "17", room2: "565", note: "" },
+    { name: "張OO", class: "909", gender: "女", bus: 7, room1: "2086", table1: "18", room2: "565", note: "" },
+    { name: "陳OO", class: "909", gender: "女", bus: 7, room1: "2086", table1: "16", room2: "565", note: "" },
+    { name: "蔡OO", class: "909", gender: "女", bus: 7, room1: "2086", table1: "16", room2: "565", note: "" },
+    { name: "何OO", class: "909", gender: "女", bus: 7, room1: "2120", table1: "17", room2: "566", note: "" },
+    { name: "林OO", class: "909", gender: "女", bus: 7, room1: "2120", table1: "16", room2: "566", note: "" },
+    { name: "林OO", class: "909", gender: "女", bus: 7, room1: "2120", table1: "17", room2: "566", note: "" },
+    { name: "林OO", class: "909", gender: "女", bus: 7, room1: "2120", table1: "17", room2: "566", note: "" }
   ],
 
   attractions: [
@@ -920,8 +920,8 @@ const TRIP_DATA = {
   notices: {
     briefing: {
       date: "10/20（二）",
-      speaker: "董O遠學務主任",
-      title: "10/20（二）董O遠主任 畢旅行前說明會重點宣導",
+      speaker: "董OO學務主任",
+      title: "10/20（二）董OO主任 畢旅行前說明會重點宣導",
       items: [
         {
           num: "一",
@@ -1063,17 +1063,69 @@ const TRIP_DATA = {
 
   // 9. 班級相片上傳區 (Padlet 雲端相簿)
   photoUploads: [
-    { classId: "301", className: "301 班", mentor: "吳O萱 導師", bus: 2, padletUrl: "https://padlet.com/qianyikeji1/301-s024ojlda9hk5xe7np2t" },
-    { classId: "302", className: "302 班", mentor: "黃O英 導師", bus: 2, padletUrl: "https://padlet.com/qianyikeji1/302-s024okmini4rgymbs9yw" },
-    { classId: "303", className: "303 班", mentor: "陳O綸 導師", bus: 3, padletUrl: "https://padlet.com/qianyikeji1/303-s024okmwsdwvjgadya4k" },
-    { classId: "304", className: "304 班", mentor: "蔡O秀 導師", bus: 1, padletUrl: "https://padlet.com/qianyikeji1/304-s024oknt94p6yo7etau4" },
-    { classId: "305", className: "305 班", mentor: "施O婷 導師", bus: 4, padletUrl: "https://padlet.com/qianyikeji1/305-s024oo9ogma3cyhep5cm" },
-    { classId: "306", className: "306 班", mentor: "石O洋 導師", bus: 5, padletUrl: "https://padlet.com/qianyikeji1/306-s024oo9zjhfilzg9gncp" },
-    { classId: "307", className: "307 班", mentor: "孫O惠 導師", bus: 6, padletUrl: "https://padlet.com/qianyikeji1/307-s024oo9oyvf8h7964ydm" },
-    { classId: "308", className: "308 班", mentor: "李O嘉 導師", bus: 6, padletUrl: "https://padlet.com/qianyikeji1/308-s024oo961fnycpk4lm5u" },
-    { classId: "309", className: "309 班", mentor: "黃O姿 導師", bus: 7, padletUrl: "https://padlet.com/qianyikeji1/309-s024oo9qzxaowa80fjlz" }
+    { classId: "301", className: "301 班", mentor: "吳OO 導師", bus: 2, padletUrl: "https://padlet.com/qianyikeji1/301-s024ojlda9hk5xe7np2t" },
+    { classId: "302", className: "302 班", mentor: "黃OO 導師", bus: 2, padletUrl: "https://padlet.com/qianyikeji1/302-s024okmini4rgymbs9yw" },
+    { classId: "303", className: "303 班", mentor: "陳OO 導師", bus: 3, padletUrl: "https://padlet.com/qianyikeji1/303-s024okmwsdwvjgadya4k" },
+    { classId: "304", className: "304 班", mentor: "蔡OO 導師", bus: 1, padletUrl: "https://padlet.com/qianyikeji1/304-s024oknt94p6yo7etau4" },
+    { classId: "305", className: "305 班", mentor: "施OO 導師", bus: 4, padletUrl: "https://padlet.com/qianyikeji1/305-s024oo9ogma3cyhep5cm" },
+    { classId: "306", className: "306 班", mentor: "石OO 導師", bus: 5, padletUrl: "https://padlet.com/qianyikeji1/306-s024oo9zjhfilzg9gncp" },
+    { classId: "307", className: "307 班", mentor: "孫OO 導師", bus: 6, padletUrl: "https://padlet.com/qianyikeji1/307-s024oo9oyvf8h7964ydm" },
+    { classId: "308", className: "308 班", mentor: "李OO 導師", bus: 6, padletUrl: "https://padlet.com/qianyikeji1/308-s024oo961fnycpk4lm5u" },
+    { classId: "309", className: "309 班", mentor: "黃OO 導師", bus: 7, padletUrl: "https://padlet.com/qianyikeji1/309-s024oo9qzxaowa80fjlz" }
   ]
 };
+
+// 資料庫自動相容性補強 (Normalization)
+if (TRIP_DATA) {
+  // 學生名冊雙向別名
+  if (TRIP_DATA.students && !TRIP_DATA.roster) {
+    TRIP_DATA.roster = TRIP_DATA.students;
+  }
+  // 欄位標準化 (相容 day1Room / room1, table / table1 等)
+  if (TRIP_DATA.students) {
+    TRIP_DATA.students.forEach((s, idx) => {
+      s.id = s.id || ('s-' + (idx + 1));
+      s.day1Room = s.day1Room || s.room1 || '－';
+      s.day2Room = s.day2Room || s.room2 || '－';
+      s.table = s.table || s.table1 || '－';
+      s.bus = s.bus || s.busNo || '－';
+    });
+  }
+  if (TRIP_DATA.teachers) {
+    TRIP_DATA.teachers.forEach((t, idx) => {
+      t.id = t.id || ('t-' + (idx + 1));
+      t.day1Room = t.day1Room || t.roomDay1 || '－';
+      t.day2Room = t.day2Room || t.roomDay2 || '－';
+    });
+  }
+  if (TRIP_DATA.buses) {
+    TRIP_DATA.buses.forEach(b => {
+      b.bus = b.bus || b.busNo || 0;
+      b.total = b.total || b.totalStudents || 0;
+      b.vegetarian = b.vegetarian !== undefined ? b.vegetarian : (b.vegCount || 0);
+      b.male = b.male !== undefined ? b.male : (b.countDetail ? ((b.countDetail.match(/男(\d+)/) || [0, 0])[1]) : 0);
+      b.female = b.female !== undefined ? b.female : (b.countDetail ? ((b.countDetail.match(/女(\d+)/) || [0, 0])[1]) : 0);
+      b.teachers = b.teachers || (b.chaperones ? b.chaperones.map(c => c.name) : []);
+    });
+  }
+  // 行李清單雙向別名
+  if (TRIP_DATA.packingChecklist && !TRIP_DATA.packing) {
+    TRIP_DATA.packing = TRIP_DATA.packingChecklist;
+  }
+  // 海生館問答相容
+  if (TRIP_DATA.quiz) {
+    if (TRIP_DATA.quiz.qa && !TRIP_DATA.quiz.qaCards) {
+      TRIP_DATA.quiz.qaCards = TRIP_DATA.quiz.qa;
+    }
+    if (TRIP_DATA.quiz.trueFalse) {
+      TRIP_DATA.quiz.trueFalse.forEach(tf => {
+        tf.q = tf.q || tf.question;
+        tf.a = tf.a !== undefined ? tf.a : tf.answer;
+        tf.expl = tf.expl || tf.explanation;
+      });
+    }
+  }
+}
 
 const UNITS_DATA = [
   {
@@ -1727,7 +1779,7 @@ const UNITS_DATA = [
     "qa": [
       {
         "q": "搭乘摩天輪時若突然停頓該如何反應？",
-        "a": "摩天輪為輪椅或行動不便乘客進出時會短暫低速暫停，屬於正常運作機制，請安心就座切勿驚慌站立。"
+        "a": "摩天輪為輪椅或行動不便乘客進出時會短zat低速暫停，屬於正常運作機制，請安心就座切勿驚慌站立。"
       }
     ]
   },

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Generates rich unified data.js with:
-1. TRIP_DATA (Official Handbook - 100% de-identified)
+1. TRIP_DATA (Official Handbook - 100% de-identified with 2nd and 3rd char masked as 'O')
 2. UNITS_DATA (14 Media Folders - tabs, slides, videos, infographics, and rich educational notes)
 """
 import os
@@ -130,7 +130,7 @@ UNIT_NOTES = {
             "夜宿義大天悅飯店：義大天悅為四星級商務渡假飯店，進房後落實安靜不擾民，為第三天充沛體力充電。"
         ],
         "qa": [
-            {"q": "搭乘摩天輪時若突然停頓該如何反應？", "a": "摩天輪為輪椅或行動不便乘客進出時會短暫低速暫停，屬於正常運作機制，請安心就座切勿驚慌站立。"}
+            {"q": "搭乘摩天輪時若突然停頓該如何反應？", "a": "摩天輪為輪椅或行動不便乘客進出時會短zat低速暫停，屬於正常運作機制，請安心就座切勿驚慌站立。"}
         ]
     },
     "unit-12": {
@@ -168,6 +168,23 @@ UNIT_NOTES = {
     }
 }
 
+def mask_person_name(name):
+    """
+    去個資合規：姓名第2與第3個字強制替換為 'O'
+    2字姓名：吳成 -> 吳O
+    3字姓名：簡OX -> 簡OO, 蔡O秀 -> 蔡OO
+    4字姓名：歐陽XX -> 歐OOO
+    """
+    if not name or name in ['墾丁福華渡假大飯店', '高雄義大天悅飯店', '合谷穴', '內關穴', '足三里穴']:
+        return name
+    if len(name) == 2:
+        return name[0] + 'O'
+    elif len(name) == 3:
+        return name[0] + 'OO'
+    elif len(name) >= 4:
+        return name[0] + 'OO' + name[3:]
+    return name
+
 def main():
     source_data_path = r"C:\antigravity\1151018投中畢旅手冊\data.js"
     with open(source_data_path, "r", encoding="utf-8") as f:
@@ -182,6 +199,49 @@ def main():
     
     trip_data_raw = m.group(1).rstrip(";")
     
+    # 僅針對人名進行替換
+    def repl_name(match):
+        pre = match.group(1)
+        name = match.group(2)
+        if name in ['墾丁福華渡假大飯店', '高雄義大天悅飯店', '合谷穴', '內關穴', '足三里穴']:
+            return f'{pre}"{name}"'
+        return f'{pre}"{mask_person_name(name)}"'
+
+    trip_data_raw = re.sub(r'(\bname:\s*)"([^"]+)"', repl_name, trip_data_raw)
+    
+    # 師長備註中的名字替換
+    notes_replacements = [
+        ('蔡O秀', '蔡OO'), ('黃O姿', '黃OO'), ('施O婷', '施OO'), ('陳O綸', '陳OO'),
+        ('董O遠', '董OO'), ('吳O萱', '吳OO'), ('黃O英', '黃OO'), ('李O嘉', '李OO'),
+        ('姚O勤', '姚OO'), ('劉O彥', '劉OO'), ('石O洋', '石OO'), ('孫O惠', '孫OO')
+    ]
+    for old, new in notes_replacements:
+        trip_data_raw = trip_data_raw.replace(old, new)
+
+    # 確保 packingChecklist 原名不被誤傷
+    fix_pack = [
+        ('個OO保 IC 卡', '個人健保 IC 卡'),
+        ('適OO錢與零用金', '適量零錢與零用金'),
+        ('家OO門鑰匙', '家裡大門鑰匙'),
+        ('紙OO、手冊或手機', '紙、筆、手冊或手機'),
+        ('換OO物 2~3 套', '換洗衣物 2~3 套'),
+        ('個OO刷、牙膏', '個人牙刷、牙膏'),
+        ('梳OO浴帽、個人毛巾', '梳子、浴帽、個人毛巾'),
+        ('輕OO外套', '輕便薄外套'),
+        ('乾OO膠袋數個', '乾淨塑膠袋數個'),
+        ('大OO李箱或旅行袋', '大型行李箱或旅行袋'),
+        ('個OO肩隨身背包', '個人雙肩隨身背包'),
+        ('個OO備藥物', '個人常備藥物'),
+        ('個OO身水壺 / 環保杯', '個人隨身水壺 / 環保杯'),
+        ('遮OO、太陽眼鏡', '遮陽帽、太陽眼鏡'),
+        ('防OO、防蚊液', '防曬乳、防蚊液'),
+        ('輕OO衣或折疊傘', '輕便雨衣或折疊傘'),
+        ('備OO罩 4~6 個', '備用口罩 4~6 個'),
+        ('行OO源與充電線', '行動電源與充電線')
+    ]
+    for wrong, right in fix_pack:
+        trip_data_raw = trip_data_raw.replace(wrong, right)
+
     units_data = scan_all()
     # Merge rich educational notes into each unit
     for u in units_data:
@@ -195,11 +255,65 @@ def main():
     
     units_json = json.dumps(units_data, ensure_ascii=False, indent=2)
     
+    compatibility_code = """
+// 資料庫自動相容性補強 (Normalization)
+if (TRIP_DATA) {
+  // 學生名冊雙向別名
+  if (TRIP_DATA.students && !TRIP_DATA.roster) {
+    TRIP_DATA.roster = TRIP_DATA.students;
+  }
+  // 欄位標準化 (相容 day1Room / room1, table / table1 等)
+  if (TRIP_DATA.students) {
+    TRIP_DATA.students.forEach((s, idx) => {
+      s.id = s.id || ('s-' + (idx + 1));
+      s.day1Room = s.day1Room || s.room1 || '－';
+      s.day2Room = s.day2Room || s.room2 || '－';
+      s.table = s.table || s.table1 || '－';
+      s.bus = s.bus || s.busNo || '－';
+    });
+  }
+  if (TRIP_DATA.teachers) {
+    TRIP_DATA.teachers.forEach((t, idx) => {
+      t.id = t.id || ('t-' + (idx + 1));
+      t.day1Room = t.day1Room || t.roomDay1 || '－';
+      t.day2Room = t.day2Room || t.roomDay2 || '－';
+    });
+  }
+  if (TRIP_DATA.buses) {
+    TRIP_DATA.buses.forEach(b => {
+      b.bus = b.bus || b.busNo || 0;
+      b.total = b.total || b.totalStudents || 0;
+      b.vegetarian = b.vegetarian !== undefined ? b.vegetarian : (b.vegCount || 0);
+      b.male = b.male !== undefined ? b.male : (b.countDetail ? ((b.countDetail.match(/男(\\d+)/) || [0, 0])[1]) : 0);
+      b.female = b.female !== undefined ? b.female : (b.countDetail ? ((b.countDetail.match(/女(\\d+)/) || [0, 0])[1]) : 0);
+      b.teachers = b.teachers || (b.chaperones ? b.chaperones.map(c => c.name) : []);
+    });
+  }
+  // 行李清單雙向別名
+  if (TRIP_DATA.packingChecklist && !TRIP_DATA.packing) {
+    TRIP_DATA.packing = TRIP_DATA.packingChecklist;
+  }
+  // 海生館問答相容
+  if (TRIP_DATA.quiz) {
+    if (TRIP_DATA.quiz.qa && !TRIP_DATA.quiz.qaCards) {
+      TRIP_DATA.quiz.qaCards = TRIP_DATA.quiz.qa;
+    }
+    if (TRIP_DATA.quiz.trueFalse) {
+      TRIP_DATA.quiz.trueFalse.forEach(tf => {
+        tf.q = tf.q || tf.question;
+        tf.a = tf.a !== undefined ? tf.a : tf.answer;
+        tf.expl = tf.expl || tf.explanation;
+      });
+    }
+  }
+}
+"""
+
     output_js = f"""// 南投縣立南投國民中學 115學年度 畢業旅行官方手冊與14大單元多媒體教材全集
 // 本資料庫全數個人資訊均已完成嚴格去識別化處理（第二與第三字元遮罩為 O），符合個人資料保護法規
 
 const TRIP_DATA = {trip_data_raw};
-
+{compatibility_code}
 const UNITS_DATA = {units_json};
 
 if (typeof module !== 'undefined') {{

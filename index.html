@@ -24,7 +24,7 @@
           <h1>南投國中 115學年度 畢業旅行導覽網</h1>
           <p>
             <span>南台灣三日知性與歡樂之旅 (115.10.21 - 10.23)</span>
-            <span class="pill-shield">🛡️ 去個資合規保護版</span>
+            <span class="pill-shield">🛡️ 去個資合規保護版 (第二、三字遮罩 O)</span>
           </p>
         </div>
       </div>
@@ -63,6 +63,16 @@
         <p>
           本站完整數位化南投國中畢業旅行官方手冊（115南投國中畢旅手冊資料.pdf），結合 14 個影音與簡報單元，提供師生、家長隨身查閱行程、即時去個資房號速查、團務編組、海洋學習單與生活安全公約。
         </p>
+        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+          <a href="115南投國中畢旅手冊資料.pdf" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; background:var(--primary); color:#ffffff; border-color:var(--primary); font-weight:700; padding:8px 16px; border-radius:8px;">
+            <span>📄</span> 檢視 / 下載官方手冊完整 PDF 原檔
+          </a>
+          <div class="privacy-toggle-group">
+            <span style="font-size:0.82rem; font-weight:700; padding:0 8px; color:var(--text-muted);">🛡️ 個資模式：</span>
+            <button id="btn-privacy-masked" class="btn-privacy active" onclick="setPrivacyMode('masked')">姓名遮罩 (簡OO)</button>
+            <button id="btn-privacy-anon" class="btn-privacy" onclick="setPrivacyMode('anonymous')">完全隱藏姓名</button>
+          </div>
+        </div>
       </div>
 
       <!-- 四大數據統計卡片 -->
@@ -78,7 +88,7 @@
             <span>房號、桌次與隨車車次即時速查</span>
           </h3>
           <p>
-            支援輸入<strong>同學姓名（如 簡O翔）、師長姓名、班級（如 901）、福華房號（如 2141）、天悅房號（如 501）或桌次</strong>即時查詢：
+            支援輸入<strong>同學姓名（如 簡OO）、師長姓名（如 董OO）、班級（如 901）、福華房號（如 2141）、天悅房號（如 501）或桌次車次</strong>即時查詢：
           </p>
         </div>
         <div class="search-input-wrapper">
@@ -129,7 +139,7 @@
                 <th>女生</th>
                 <th>合計</th>
                 <th>素食</th>
-                <th>隨車師長（第二字遮罩 O）</th>
+                <th>隨車師長（第二、三字遮罩 O）</th>
               </tr>
             </thead>
             <tbody id="buses-table-body">
@@ -215,6 +225,20 @@
           <div class="progress-bar-fill" id="packing-progress-bar"></div>
         </div>
         <div id="packing-checklist-container">
+          <!-- 由 app.js 動態渲染 -->
+        </div>
+      </div>
+
+      <!-- 班級相片雲端相簿 (Padlet 即時上傳) -->
+      <div class="timeline-card">
+        <div class="unit-section-title" style="margin-top:0;">
+          <h3><span>📸</span> 各班畢旅精彩相片雲端相簿 (Padlet 即時上傳)</h3>
+          <span class="section-indicator">全校 9 班專屬雲端相簿</span>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">
+          點擊各班專屬連結即可前往 Padlet 雲端相簿，即時上傳與瀏覽畢業旅行精彩照片：
+        </p>
+        <div class="photo-uploads-grid" id="photo-uploads-grid">
           <!-- 由 app.js 動態渲染 -->
         </div>
       </div>

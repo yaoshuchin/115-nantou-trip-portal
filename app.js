@@ -9,25 +9,70 @@ function sanitizeName(name) {
   if (!name || typeof name !== 'string') return '';
   const trimmed = name.trim();
   if (trimmed.length <= 1) return trimmed;
-  // 若已含 O 則維持安全
-  if (trimmed.includes('O') || trimmed.includes('o')) return trimmed;
+  // Whitelist non-person strings
+  if (trimmed.includes('飯店') || trimmed.includes('中學') || trimmed.includes('穴')) return trimmed;
+  
+  // 若為 2 字：吳成 -> 吳O
   if (trimmed.length === 2) {
     return trimmed[0] + 'O';
-  } else if (trimmed.length === 3) {
-    return trimmed[0] + 'OO';
-  } else {
-    return trimmed[0] + 'OO' + trimmed.slice(3);
   }
+  // 若為 3 字：簡OX 或 簡XX -> 簡OO
+  if (trimmed.length === 3) {
+    return trimmed[0] + 'OO';
+  }
+  // 若為 4 字以上：歐陽XX -> 歐OOO
+  return trimmed[0] + 'OO' + 'O'.repeat(trimmed.length - 3);
+}
+
+// 根據隱私模式動態格式化顯示名稱
+function formatDisplayName(name, idx = 0, className = null, role = null) {
+  if (AppState.privacyMode === 'anonymous') {
+    if (className) {
+      const numStr = String(idx + 1).padStart(2, '0');
+      return `${className}班 #${numStr}`;
+    } else if (role) {
+      return `${role}`;
+    } else {
+      return `成員 #${idx + 1}`;
+    }
+  }
+  return sanitizeName(name);
 }
 
 // 狀態管理物件
 const AppState = {
   currentTab: 'tab-handbook',
   theme: localStorage.getItem('ntjh_theme') || 'light',
+  privacyMode: localStorage.getItem('ntjh_privacy_mode') || 'masked', // 'masked' 或 'anonymous'
+  currentClass: '901',
   unitsState: {}, // 紀錄各單元簡報當前投影片頁碼 { 'unit-01': 0, ... }
   packingState: JSON.parse(localStorage.getItem('ntjh_packing') || '{}'),
   lightboxImages: [],
   lightboxIndex: 0
+};
+
+// 隱私模式切換
+window.setPrivacyMode = function(mode) {
+  AppState.privacyMode = mode;
+  localStorage.setItem('ntjh_privacy_mode', mode);
+  
+  const btnMasked = document.getElementById('btn-privacy-masked');
+  const btnAnon = document.getElementById('btn-privacy-anon');
+  if (btnMasked && btnAnon) {
+    if (mode === 'masked') {
+      btnMasked.classList.add('active');
+      btnAnon.classList.remove('active');
+    } else {
+      btnMasked.classList.remove('active');
+      btnAnon.classList.add('active');
+    }
+  }
+  
+  renderHandbook();
+  const searchInput = document.getElementById('global-search-input');
+  if (searchInput && searchInput.value.trim()) {
+    searchInput.dispatchEvent(new Event('input'));
+  }
 };
 
 // 初始化各單元狀態
@@ -68,6 +113,19 @@ function initTheme() {
       localStorage.setItem('ntjh_theme', AppState.theme);
       updateThemeIcon(themeBtn);
     });
+  }
+
+  // 隱私按鈕狀態同步
+  const btnMasked = document.getElementById('btn-privacy-masked');
+  const btnAnon = document.getElementById('btn-privacy-anon');
+  if (btnMasked && btnAnon) {
+    if (AppState.privacyMode === 'masked') {
+      btnMasked.classList.add('active');
+      btnAnon.classList.remove('active');
+    } else {
+      btnMasked.classList.remove('active');
+      btnAnon.classList.add('active');
+    }
   }
 }
 
@@ -199,28 +257,31 @@ function renderHandbook() {
   // 3. 渲染車次與隨車師長表
   const busesTableBody = document.getElementById('buses-table-body');
   if (busesTableBody && TRIP_DATA.buses) {
-    busesTableBody.innerHTML = TRIP_DATA.buses.map(b => `
-      <tr>
-        <td><strong>第 ${b.bus} 車</strong></td>
-        <td><span class="badge-tag">${b.classes}</span></td>
-        <td>${b.male}</td>
-        <td>${b.female}</td>
-        <td><strong>${b.total}</strong></td>
-        <td>${b.vegetarian > 0 ? `<span style="color:var(--success); font-weight:700;">🌱 ${b.vegetarian}</span>` : '0'}</td>
-        <td><strong>${b.teachers.map(sanitizeName).join('、')}</strong></td>
-      </tr>
-    `).join('');
+    busesTableBody.innerHTML = TRIP_DATA.buses.map(b => {
+      const teacherNames = (b.teachers || []).map((tName, i) => formatDisplayName(tName, i, null, '隨車師長')).join('、');
+      return `
+        <tr>
+          <td><strong>第 ${b.bus} 車</strong></td>
+          <td><span class="badge-tag">${b.classes}</span></td>
+          <td>${b.male}</td>
+          <td>${b.female}</td>
+          <td><strong>${b.total}</strong></td>
+          <td>${b.vegetarian > 0 ? `<span style="color:var(--success); font-weight:700;">🌱 ${b.vegetarian}</span>` : '0'}</td>
+          <td><strong>${teacherNames}</strong></td>
+        </tr>
+      `;
+    }).join('');
   }
 
   // 4. 渲染師長分房表
   const teachersTableBody = document.getElementById('teachers-table-body');
   if (teachersTableBody && TRIP_DATA.teachers) {
-    teachersTableBody.innerHTML = TRIP_DATA.teachers.map(t => `
+    teachersTableBody.innerHTML = TRIP_DATA.teachers.map((t, idx) => `
       <tr>
         <td><span class="badge-tag">${t.role}</span></td>
-        <td><strong>${sanitizeName(t.name)}</strong></td>
-        <td><strong style="color:var(--primary);">${t.day1Room || '－'}</strong></td>
-        <td><strong style="color:var(--secondary);">${t.day2Room || '－'}</strong></td>
+        <td><strong>${formatDisplayName(t.name, idx, null, t.role)}</strong></td>
+        <td><strong style="color:var(--primary);">${t.day1Room || t.roomDay1 || '－'}</strong></td>
+        <td><strong style="color:var(--secondary);">${t.day2Room || t.roomDay2 || '－'}</strong></td>
         <td>第 ${t.bus} 車</td>
         <td style="color:var(--text-muted); font-size:0.82rem;">${t.note || '－'}</td>
       </tr>
@@ -229,10 +290,13 @@ function renderHandbook() {
 
   // 5. 渲染班級名冊分籤
   renderClassRosterNav();
-  renderClassRoster('901');
+  renderClassRoster(AppState.currentClass || '901');
 
   // 6. 渲染海生館問答闖關
   renderOceanQuiz();
+
+  // 7. 渲染班級相片雲端相簿
+  renderPhotoUploads();
 }
 
 // 行程時間軸渲染
@@ -282,7 +346,7 @@ function renderClassRosterNav() {
   if (!nav) return;
   const classes = ['901', '902', '903', '904', '905', '906', '907', '908', '909'];
   nav.innerHTML = classes.map(c => `
-    <button class="class-btn ${c === '901' ? 'active' : ''}" data-class="${c}">
+    <button class="class-btn ${c === AppState.currentClass ? 'active' : ''}" data-class="${c}">
       ${c} 班
     </button>
   `).join('');
@@ -290,6 +354,7 @@ function renderClassRosterNav() {
   nav.querySelectorAll('.class-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const cls = btn.getAttribute('data-class');
+      AppState.currentClass = cls;
       nav.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderClassRoster(cls);
@@ -298,20 +363,22 @@ function renderClassRosterNav() {
 }
 
 function renderClassRoster(className) {
+  AppState.currentClass = className;
   const tbody = document.getElementById('roster-table-body');
-  if (!tbody || !TRIP_DATA.roster) return;
+  const rosterList = TRIP_DATA.roster || TRIP_DATA.students;
+  if (!tbody || !rosterList) return;
 
-  const students = TRIP_DATA.roster.filter(s => s.class === className);
+  const students = rosterList.filter(s => s.class === className);
   tbody.innerHTML = students.map((s, idx) => `
     <tr>
       <td>${idx + 1}</td>
       <td><strong>${s.class}</strong></td>
-      <td><strong>${sanitizeName(s.name)}</strong></td>
+      <td><strong>${formatDisplayName(s.name, idx, s.class)}</strong></td>
       <td>${s.gender === '男' ? '<span style="color:var(--primary);">👦 男</span>' : '<span style="color:var(--danger);">👧 女</span>'}</td>
-      <td><strong style="color:var(--primary);">${s.day1Room || '－'}</strong></td>
-      <td><strong style="color:var(--secondary);">${s.day2Room || '－'}</strong></td>
-      <td>第 ${s.table || '－'} 桌</td>
-      <td>第 ${s.bus || '－'} 車</td>
+      <td><strong style="color:var(--primary);">${s.day1Room || s.room1 || '－'}</strong></td>
+      <td><strong style="color:var(--secondary);">${s.day2Room || s.room2 || '－'}</strong></td>
+      <td>第 ${s.table || s.table1 || '－'} 桌</td>
+      <td>第 ${s.bus || s.busNo || '－'} 車</td>
     </tr>
   `).join('');
 }
@@ -321,18 +388,25 @@ function renderOceanQuiz() {
   const wrap = document.getElementById('ocean-quiz-cards');
   if (!wrap || !TRIP_DATA.quiz) return;
 
+  const tfList = TRIP_DATA.quiz.trueFalse || [];
+  const qaList = TRIP_DATA.quiz.qa || TRIP_DATA.quiz.qaCards || [];
+
   let html = `
     <h4 style="margin:20px 0 10px; color:var(--primary); font-size:1.05rem;">🎯 是非觀念即時挑戰（點擊選項驗證）</h4>
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; margin-bottom:24px;">
   `;
 
-  TRIP_DATA.quiz.trueFalse.forEach((tf, i) => {
+  tfList.forEach((tf, i) => {
+    const qText = tf.question || tf.q;
+    const aVal = tf.answer !== undefined ? tf.answer : tf.a;
+    const expl = tf.explanation || tf.expl;
+
     html += `
       <div class="qa-item" id="tf-box-${i}">
-        <div style="font-weight:700; font-size:0.92rem; margin-bottom:8px;">${i + 1}. ${tf.q}</div>
+        <div style="font-weight:700; font-size:0.92rem; margin-bottom:8px;">${qText}</div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-deck" onclick="checkTF(${i}, true, ${tf.a})">⭕ 是</button>
-          <button class="btn-deck" onclick="checkTF(${i}, false, ${tf.a})">❌ 否</button>
+          <button class="btn-deck" onclick="checkTF(${i}, true, ${aVal})">⭕ 是</button>
+          <button class="btn-deck" onclick="checkTF(${i}, false, ${aVal})">❌ 否</button>
         </div>
         <div id="tf-feedback-${i}" style="margin-top:8px; font-size:0.85rem; display:none;"></div>
       </div>
@@ -345,11 +419,11 @@ function renderOceanQuiz() {
     <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;">
   `;
 
-  TRIP_DATA.quiz.qaCards.forEach((card, idx) => {
+  qaList.forEach((card, idx) => {
     html += `
       <div class="qa-item" style="cursor:pointer;" onclick="toggleQACard(this)">
-        <div class="qa-q">${idx + 1}. ${card.q}</div>
-        <div class="qa-a" style="display:none; color:var(--text-main); font-weight:600; margin-top:6px; border-top:1px dashed var(--border-color); padding-top:6px;">
+        <div class="qa-q">${card.num || (idx + 1)}. ${card.q}</div>
+        <div class="qa-a" style="display:none; color:var(--text-main); font-weight:600; margin-top:6px; border-top:1px dashed var(--border-color); padding-top:6px; white-space:pre-line;">
           💡 解答：${card.a}
         </div>
       </div>
@@ -364,10 +438,12 @@ window.checkTF = function(idx, userPick, correctAnswer) {
   const fb = document.getElementById(`tf-feedback-${idx}`);
   if (!fb) return;
   fb.style.display = 'block';
+  const tf = (TRIP_DATA.quiz.trueFalse || [])[idx];
+  const expl = tf ? (tf.explanation || tf.expl || '') : '';
   if (userPick === correctAnswer) {
-    fb.innerHTML = `<span style="color:var(--success); font-weight:700;">🎉 答對了！</span> ${TRIP_DATA.quiz.trueFalse[idx].expl}`;
+    fb.innerHTML = `<span style="color:var(--success); font-weight:700;">🎉 答對了！</span> ${expl}`;
   } else {
-    fb.innerHTML = `<span style="color:var(--danger); font-weight:700;">❌ 答錯囉！</span> ${TRIP_DATA.quiz.trueFalse[idx].expl}`;
+    fb.innerHTML = `<span style="color:var(--danger); font-weight:700;">❌ 答錯囉！</span> ${expl}`;
   }
 };
 
@@ -377,6 +453,32 @@ window.toggleQACard = function(el) {
     ans.style.display = ans.style.display === 'none' ? 'block' : 'none';
   }
 };
+
+// 班級相片雲端相簿
+function renderPhotoUploads() {
+  const container = document.getElementById('photo-uploads-grid');
+  if (!container || !TRIP_DATA.photoUploads) return;
+
+  container.innerHTML = TRIP_DATA.photoUploads.map((p, idx) => {
+    const mentorName = formatDisplayName(p.mentor.replace(' 導師', ''), idx, null, p.className + '導師');
+    return `
+      <div class="photo-upload-card">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 style="margin:0; font-size:1.05rem; color:var(--primary); font-weight:800;">${p.className}</h4>
+            <span class="badge-tag">隨車 第 ${p.bus} 車</span>
+          </div>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin:0 0 14px 0;">
+            隨車導師：<strong style="color:var(--text-main);">${mentorName} 導師</strong>
+          </p>
+        </div>
+        <a href="${p.padletUrl}" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-align:center; text-decoration:none; display:block; background:rgba(37, 99, 235, 0.08); color:var(--primary); font-weight:700; border:1px solid rgba(37, 99, 235, 0.25); padding:8px 12px; border-radius:8px;">
+          📸 前往 ${p.className} 專屬 Padlet 相簿 ↗
+        </a>
+      </div>
+    `;
+  }).join('');
+}
 
 /* ==========================================================================
    即時速查搜尋引擎 Live Search
@@ -393,42 +495,49 @@ function initSearch() {
       return;
     }
 
-    const matchedStudents = TRIP_DATA.roster.filter(s => {
+    const rosterList = TRIP_DATA.roster || TRIP_DATA.students || [];
+    const matchedStudents = rosterList.filter((s, idx) => {
       const masked = sanitizeName(s.name).toLowerCase();
       const raw = (s.name || '').toLowerCase();
-      const room1 = (s.day1Room || '').toLowerCase();
-      const room2 = (s.day2Room || '').toLowerCase();
-      const cls = (s.class || '').toLowerCase();
-      const tbl = String(s.table || '');
-      const bus = String(s.bus || '');
-      return masked.includes(q) || raw.includes(q) || room1.includes(q) || room2.includes(q) || cls.includes(q) || tbl === q || bus === q;
+      const room1 = String(s.day1Room || s.room1 || '').toLowerCase();
+      const room2 = String(s.day2Room || s.room2 || '').toLowerCase();
+      const cls = String(s.class || '').toLowerCase();
+      const tbl = String(s.table || s.table1 || '').toLowerCase();
+      const bus = String(s.bus || s.busNo || '').toLowerCase();
+      const anonTag = `${cls}班 #${String(idx+1).padStart(2,'0')}`.toLowerCase();
+      
+      return masked.includes(q) || raw.includes(q) || room1.includes(q) || room2.includes(q) ||
+             cls.includes(q) || tbl === q || tbl.includes(q) || bus === q || bus.includes(q) || anonTag.includes(q);
     });
 
-    const matchedTeachers = TRIP_DATA.teachers.filter(t => {
+    const matchedTeachers = (TRIP_DATA.teachers || []).filter(t => {
       const masked = sanitizeName(t.name).toLowerCase();
-      const role = (t.role || '').toLowerCase();
-      const r1 = (t.day1Room || '').toLowerCase();
-      const r2 = (t.day2Room || '').toLowerCase();
-      return masked.includes(q) || role.includes(q) || r1.includes(q) || r2.includes(q);
+      const raw = (t.name || '').toLowerCase();
+      const role = String(t.role || '').toLowerCase();
+      const r1 = String(t.day1Room || t.roomDay1 || '').toLowerCase();
+      const r2 = String(t.day2Room || t.roomDay2 || '').toLowerCase();
+      const bus = String(t.bus || '').toLowerCase();
+      return masked.includes(q) || raw.includes(q) || role.includes(q) || r1.includes(q) || r2.includes(q) || bus === q;
     });
 
     if (matchedStudents.length === 0 && matchedTeachers.length === 0) {
-      resultsBox.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">查無相符資料，請嘗試其他關鍵字（如：901、2141、501、董O遠）</div>`;
+      resultsBox.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">查無相符資料，請嘗試其他關鍵字（如：901、2141、501、董OO）</div>`;
       return;
     }
 
     let html = `<div class="result-cards-grid">`;
 
-    matchedTeachers.forEach(t => {
+    matchedTeachers.forEach((t, idx) => {
+      const dispName = formatDisplayName(t.name, idx, null, t.role);
       html += `
         <div class="student-card" style="border-left:4px solid var(--accent-purple);">
           <div class="student-card-header">
-            <span class="student-name">👨‍🏫 ${sanitizeName(t.name)}</span>
+            <span class="student-name">👨‍🏫 ${dispName}</span>
             <span class="student-class-badge" style="background:rgba(139, 92, 246, 0.15); color:var(--accent-purple);">${t.role}</span>
           </div>
           <div class="student-card-grid">
-            <div>10/21 福華：<strong>${t.day1Room || '－'}</strong></div>
-            <div>10/22 天悅：<strong>${t.day2Room || '－'}</strong></div>
+            <div>10/21 福華：<strong>${t.day1Room || t.roomDay1 || '－'}</strong></div>
+            <div>10/22 天悅：<strong>${t.day2Room || t.roomDay2 || '－'}</strong></div>
             <div>隨車車次：<strong>第 ${t.bus} 車</strong></div>
             <div>備註：<strong>${t.note || '－'}</strong></div>
           </div>
@@ -436,18 +545,19 @@ function initSearch() {
       `;
     });
 
-    matchedStudents.forEach(s => {
+    matchedStudents.forEach((s, idx) => {
+      const dispName = formatDisplayName(s.name, idx, s.class);
       html += `
         <div class="student-card" style="border-left:4px solid ${s.gender === '男' ? 'var(--primary)' : 'var(--danger)'};">
           <div class="student-card-header">
-            <span class="student-name">${s.gender === '男' ? '👦' : '👧'} ${sanitizeName(s.name)}</span>
+            <span class="student-name">${s.gender === '男' ? '👦' : '👧'} ${dispName}</span>
             <span class="student-class-badge">${s.class} 班</span>
           </div>
           <div class="student-card-grid">
-            <div>10/21 福華：<strong>${s.day1Room || '－'}</strong></div>
-            <div>10/22 天悅：<strong>${s.day2Room || '－'}</strong></div>
-            <div>桌次：<strong>第 ${s.table} 桌</strong></div>
-            <div>隨車：<strong>第 ${s.bus} 車</strong></div>
+            <div>10/21 福華：<strong>${s.day1Room || s.room1 || '－'}</strong></div>
+            <div>10/22 天悅：<strong>${s.day2Room || s.room2 || '－'}</strong></div>
+            <div>桌次：<strong>第 ${s.table || s.table1 || '－'} 桌</strong></div>
+            <div>隨車：<strong>第 ${s.bus || s.busNo || '－'} 車</strong></div>
           </div>
         </div>
       `;
@@ -463,15 +573,15 @@ function initSearch() {
    ========================================================================== */
 function initPackingList() {
   const container = document.getElementById('packing-checklist-container');
-  if (!container || !TRIP_DATA.packing) return;
+  const items = TRIP_DATA.packingChecklist || TRIP_DATA.packing;
+  if (!container || !items) return;
 
-  const items = TRIP_DATA.packing;
   let html = '';
 
   items.forEach(cat => {
     html += `
-      <div style="margin-bottom:16px;">
-        <h5 style="font-size:0.95rem; font-weight:700; color:var(--text-main); margin-bottom:8px;">${cat.category}</h5>
+      <div style="margin-bottom:20px;">
+        <h5 style="font-size:0.95rem; font-weight:700; color:var(--text-main); margin-bottom:10px;">📋 ${cat.category}</h5>
         <div class="checklist-grid">
     `;
     cat.items.forEach(item => {
@@ -479,7 +589,10 @@ function initPackingList() {
       html += `
         <label class="check-item ${isChecked ? 'done' : ''}" data-item-id="${item.id}">
           <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="togglePackItem('${item.id}', this)">
-          <span>${item.text}</span>
+          <div>
+            <div style="font-weight:600;">${item.name || item.text}</div>
+            ${item.tip ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${item.tip}</div>` : ''}
+          </div>
         </label>
       `;
     });
@@ -505,10 +618,11 @@ window.togglePackItem = function(id, checkbox) {
 };
 
 function updatePackingProgress() {
-  if (!TRIP_DATA.packing) return;
+  const items = TRIP_DATA.packingChecklist || TRIP_DATA.packing;
+  if (!items) return;
   let total = 0;
   let checked = 0;
-  TRIP_DATA.packing.forEach(cat => {
+  items.forEach(cat => {
     cat.items.forEach(item => {
       total++;
       if (AppState.packingState[item.id]) checked++;
