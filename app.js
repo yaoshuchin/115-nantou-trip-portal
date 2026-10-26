@@ -45,6 +45,9 @@ const AppState = {
   theme: localStorage.getItem('ntjh_theme') || 'light',
   privacyMode: localStorage.getItem('ntjh_privacy_mode') || 'masked', // 'masked' 或 'anonymous'
   currentClass: '901',
+  activeDetailUnit: 'unit-01',
+  classAlbumFilter: '301',
+  classGalleryView: 'masonry', // 'masonry' 或 'grid'
   unitsState: {}, // 紀錄各單元簡報當前投影片頁碼 { 'unit-01': 0, ... }
   packingState: JSON.parse(localStorage.getItem('ntjh_packing') || '{}'),
   galleryFilter: 'all', // 'all' 或 station-01 ~ station-14
@@ -96,8 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   renderTabsNavigation();
   renderHandbook();
+  renderDetailsSection();
   renderGalleryTab();
-  renderAllUnits();
+  renderClassAlbumsSection();
+  renderPhotoDownloadSection();
   initSearch();
   initPackingList();
   initLightbox();
@@ -147,39 +152,42 @@ function updateThemeIcon(btn) {
    ========================================================================== */
 function renderTabsNavigation() {
   const tabsScroll = document.getElementById('tabs-scroll-container');
-  if (!tabsScroll || typeof UNITS_DATA === 'undefined') return;
+  if (!tabsScroll) return;
 
   const totalPhotosCount = typeof GALLERY_PHOTOS !== 'undefined' ? GALLERY_PHOTOS.length : 392;
+  const totalClassPhotosCount = typeof CLASS_PHOTOS !== 'undefined' ? CLASS_PHOTOS.length : 908;
 
   let html = `
-    <button class="tab-btn active" data-tab="tab-handbook">
+    <button class="tab-btn ${AppState.currentTab === 'tab-handbook' ? 'active' : ''}" data-tab="tab-handbook">
       <span>🏠 手冊核心</span>
       <span class="tab-badge-indicator">手冊</span>
     </button>
-    <button class="tab-btn" data-tab="tab-gallery">
+    <a href="https://yaoshuchin.github.io/ntjh-trip-handbook-2026/app.html" target="_blank" rel="noopener noreferrer" class="tab-btn tab-link-btn" title="在新分頁開啟 115投中畢旅電子手冊 PWA 網頁版">
+      <span>📖 115投中畢旅電子手冊 ↗</span>
+      <span class="tab-badge-indicator" style="background:#0ea5e9; color:#fff;">線上版</span>
+    </a>
+    <button class="tab-btn ${AppState.currentTab === 'tab-details' ? 'active' : ''}" data-tab="tab-details">
+      <span>🗺️ 詳細行程</span>
+      <span class="tab-badge-indicator" style="background:#10b981; color:#fff;">14單元</span>
+    </button>
+    <button class="tab-btn ${AppState.currentTab === 'tab-gallery' ? 'active' : ''}" data-tab="tab-gallery">
       <span>📸 實境時光廊</span>
       <span class="tab-badge-indicator" style="background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff;">${totalPhotosCount}張</span>
     </button>
+    <button class="tab-btn ${AppState.currentTab === 'tab-class-albums' ? 'active' : ''}" data-tab="tab-class-albums">
+      <span>🎓 班級相簿</span>
+      <span class="tab-badge-indicator" style="background:linear-gradient(135deg,#f59e0b,#ea580c); color:#fff;">${totalClassPhotosCount}張</span>
+    </button>
+    <button class="tab-btn ${AppState.currentTab === 'tab-photo-download' ? 'active' : ''}" data-tab="tab-photo-download">
+      <span>📥 真實相片下載</span>
+      <span class="tab-badge-indicator" style="background:#8b5cf6; color:#fff;">9班雲端</span>
+    </button>
   `;
-
-  UNITS_DATA.forEach((unit, idx) => {
-    const num = String(idx + 1).padStart(2, '0');
-    const badgeParts = [];
-    if (unit.videoCount > 0) badgeParts.push('🎬');
-    if (unit.photoCount > 0) badgeParts.push(`${unit.photoCount}照`);
-    const badgeText = badgeParts.join(' ');
-    html += `
-      <button class="tab-btn" data-tab="tab-${unit.id}">
-        <span>${num}. ${unit.tabName}</span>
-        ${badgeText ? `<span class="tab-badge-indicator">${badgeText}</span>` : ''}
-      </button>
-    `;
-  });
 
   tabsScroll.innerHTML = html;
 
   // 綁定點擊切換事件
-  tabsScroll.querySelectorAll('.tab-btn').forEach(btn => {
+  tabsScroll.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
       switchTab(targetTab);
@@ -188,10 +196,18 @@ function renderTabsNavigation() {
 }
 
 function switchTab(tabId) {
+  // 相容舊的 tab-unit-01 ~ tab-unit-14 連結，自動切換至詳細行程並鎖定該單元
+  if (tabId && tabId.startsWith('tab-unit-')) {
+    const unitId = tabId.replace('tab-', '');
+    switchTab('tab-details');
+    selectDetailUnit(unitId);
+    return;
+  }
+
   AppState.currentTab = tabId;
 
   // 更新標籤按鈕狀態
-  document.querySelectorAll('.tab-btn').forEach(btn => {
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
     if (btn.getAttribute('data-tab') === tabId) {
       btn.classList.add('active');
       btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
@@ -221,6 +237,12 @@ function handleUrlHash() {
   const targetPanel = document.getElementById(targetId);
   if (targetPanel) {
     switchTab(targetId);
+  } else if (hash.startsWith('unit-')) {
+    switchTab('tab-details');
+    selectDetailUnit(hash);
+  } else if (hash.startsWith('30') || hash.startsWith('s30')) {
+    const cid = hash.replace('s', '');
+    switchToClassAlbum(cid);
   }
 }
 
@@ -487,9 +509,14 @@ function renderPhotoUploads() {
             隨車導師：<strong style="color:var(--text-main);">${mentorName} 導師</strong>
           </p>
         </div>
-        <a href="${p.padletUrl}" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-align:center; text-decoration:none; display:block; background:rgba(37, 99, 235, 0.08); color:var(--primary); font-weight:700; border:1px solid rgba(37, 99, 235, 0.25); padding:8px 12px; border-radius:8px;">
-          📸 前往 ${p.className} 專屬 Padlet 相簿 ↗
-        </a>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn-deck" onclick="switchToClassAlbum('${p.classId}')" style="width:100%; text-align:center; background:linear-gradient(135deg, #f59e0b, #ea580c); color:#ffffff; border:none; font-weight:700; padding:8px 12px; border-radius:8px; cursor:pointer;">
+            🎓 在本站瀏覽 ${p.className} 相簿
+          </button>
+          <a href="${p.padletUrl}" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-align:center; text-decoration:none; display:block; background:rgba(37, 99, 235, 0.08); color:var(--primary); font-weight:700; border:1px solid rgba(37, 99, 235, 0.25); padding:8px 12px; border-radius:8px;">
+            📥 前往 Padlet 下載原圖 / 上傳 ↗
+          </a>
+        </div>
       </div>
     `;
   }).join('');
@@ -652,54 +679,102 @@ function updatePackingProgress() {
 }
 
 /* ==========================================================================
-   14 個主題單元渲染 All Units Renderer
+   詳細行程：14 個主題單元整合渲染 Details & Units Combined Section
    ========================================================================== */
-function renderAllUnits() {
-  const panelsContainer = document.getElementById('units-panels-wrapper');
-  if (!panelsContainer || typeof UNITS_DATA === 'undefined') return;
+function renderDetailsSection() {
+  const navContainer = document.getElementById('details-units-nav');
+  if (!navContainer || typeof UNITS_DATA === 'undefined') return;
 
-  let html = '';
+  const currentUnitId = AppState.activeDetailUnit || 'unit-01';
 
-  UNITS_DATA.forEach(unit => {
-    html += `
-      <section id="tab-${unit.id}" class="tab-panel">
-        <!-- 單元橫幅 -->
-        <div class="unit-hero">
-          <div class="unit-meta-bar">
-            <span class="badge-tag">${unit.tag}</span>
-            <span class="badge-date">🕒 ${unit.date}</span>
-            <span class="badge-date">📑 21 頁完整簡報</span>
-            ${unit.videoCount > 0 ? `<span class="badge-date" style="color:var(--primary); font-weight:700;">🎬 ${unit.videoCount} 部影音導覽</span>` : ''}
-            ${unit.photoCount > 0 ? `<span class="badge-date" style="color:var(--secondary); font-weight:700;">📸 ${unit.photoCount} 張實境相片</span>` : ''}
-          </div>
-          <h2>${unit.title}</h2>
-          <p>${unit.description}</p>
-        </div>
-
-        <!-- 影音播放區 (若有影片) -->
-        ${renderUnitVideoSection(unit)}
-
-        <!-- 21 頁全套簡報投影片輪播器 -->
-        ${renderUnitDeckSection(unit)}
-
-        <!-- 高清資訊圖表專區 -->
-        ${renderUnitInfographicsSection(unit)}
-
-        <!-- 現場實境精彩相片 (整合對應站點相片) -->
-        ${renderUnitPhotosSection(unit)}
-
-        <!-- 單元重點講義與互動問答 -->
-        ${renderUnitNotesSection(unit)}
-      </section>
+  // 渲染 14 單元快速選單按鈕
+  navContainer.innerHTML = UNITS_DATA.map((u, idx) => {
+    const num = String(idx + 1).padStart(2, '0');
+    const isActive = u.id === currentUnitId;
+    const badgeParts = [];
+    if (u.videoCount > 0) badgeParts.push('🎬');
+    if (u.photoCount > 0) badgeParts.push(`${u.photoCount}照`);
+    const badgeText = badgeParts.join(' ');
+    return `
+      <button class="unit-nav-btn ${isActive ? 'active' : ''}" onclick="selectDetailUnit('${u.id}')">
+        <span>${num}. ${u.tabName}</span>
+        ${badgeText ? `<span class="unit-nav-badge">${badgeText}</span>` : ''}
+      </button>
     `;
-  });
+  }).join('');
 
-  panelsContainer.innerHTML = html;
+  renderActiveDetailUnitContent(currentUnitId);
+}
 
-  // 綁定各單元投影片事件
-  UNITS_DATA.forEach(unit => {
-    bindDeckEvents(unit.id);
-  });
+window.selectDetailUnit = function(unitId) {
+  AppState.activeDetailUnit = unitId;
+
+  // 更新選單按鈕樣式
+  const navContainer = document.getElementById('details-units-nav');
+  if (navContainer) {
+    navContainer.querySelectorAll('.unit-nav-btn').forEach((btn, idx) => {
+      const u = UNITS_DATA[idx];
+      if (u && u.id === unitId) {
+        btn.classList.add('active');
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  // 渲染當前單元內容
+  renderActiveDetailUnitContent(unitId);
+};
+
+function renderActiveDetailUnitContent(unitId) {
+  const container = document.getElementById('details-unit-content-wrapper');
+  const countIndicator = document.getElementById('details-unit-count-indicator');
+  if (!container || typeof UNITS_DATA === 'undefined') return;
+
+  const unit = UNITS_DATA.find(u => u.id === unitId) || UNITS_DATA[0];
+  if (!unit) return;
+
+  if (countIndicator) {
+    countIndicator.innerText = `當前：${unit.title}`;
+  }
+
+  container.innerHTML = `
+    <!-- 單元橫幅 -->
+    <div class="unit-hero">
+      <div class="unit-meta-bar">
+        <span class="badge-tag">${unit.tag}</span>
+        <span class="badge-date">🕒 ${unit.date}</span>
+        <span class="badge-date">📑 21 頁完整簡報</span>
+        ${unit.videoCount > 0 ? `<span class="badge-date" style="color:var(--primary); font-weight:700;">🎬 ${unit.videoCount} 部影音導覽</span>` : ''}
+        ${unit.photoCount > 0 ? `<span class="badge-date" style="color:var(--secondary); font-weight:700;">📸 ${unit.photoCount} 張實境相片</span>` : ''}
+      </div>
+      <h2>${unit.title}</h2>
+      <p>${unit.description}</p>
+    </div>
+
+    <!-- 影音播放區 (若有影片) -->
+    ${renderUnitVideoSection(unit)}
+
+    <!-- 21 頁全套簡報投影片輪播器 -->
+    ${renderUnitDeckSection(unit)}
+
+    <!-- 高清資訊圖表專區 -->
+    ${renderUnitInfographicsSection(unit)}
+
+    <!-- 現場實境精彩相片 (整合對應站點相片) -->
+    ${renderUnitPhotosSection(unit)}
+
+    <!-- 單元重點講義與互動問答 -->
+    ${renderUnitNotesSection(unit)}
+  `;
+
+  // 綁定投影片互動事件
+  bindDeckEvents(unit.id);
+}
+
+function renderAllUnits() {
+  renderDetailsSection();
 }
 
 // 渲染單元影片區塊
@@ -1267,6 +1342,184 @@ window.openLightboxFromList = function(unitId, index) {
 };
 
 /* ==========================================================================
+   班級相簿渲染 Class Albums Section (301 ~ 309 全校 9 班 · 908 張相片)
+   ========================================================================== */
+function renderClassAlbumsSection() {
+  if (typeof CLASS_ALBUMS === 'undefined') return;
+
+  renderClassFilterButtons();
+  renderCurrentClassAlbum();
+}
+
+function renderClassFilterButtons() {
+  const filterContainer = document.getElementById('class-albums-filter');
+  if (!filterContainer || typeof CLASS_ALBUMS === 'undefined') return;
+
+  const curClassId = AppState.classAlbumFilter || '301';
+
+  filterContainer.innerHTML = CLASS_ALBUMS.map(album => {
+    const isActive = album.classId === curClassId;
+    return `
+      <button class="class-filter-btn ${isActive ? 'active' : ''}" onclick="selectClassAlbum('${album.classId}')">
+        <span>🏫 ${album.className}</span>
+        <span class="class-count-badge">${album.photoCount} 張</span>
+      </button>
+    `;
+  }).join('');
+}
+
+window.selectClassAlbum = function(classId) {
+  AppState.classAlbumFilter = classId;
+  renderClassFilterButtons();
+  renderCurrentClassAlbum();
+};
+
+function renderCurrentClassAlbum() {
+  const banner = document.getElementById('class-album-banner');
+  const photosContainer = document.getElementById('class-photos-container');
+  const countIndicator = document.getElementById('class-albums-count-indicator');
+  if (!banner || !photosContainer || typeof CLASS_ALBUMS === 'undefined') return;
+
+  const curClassId = AppState.classAlbumFilter || '301';
+  const album = CLASS_ALBUMS.find(a => a.classId === curClassId) || CLASS_ALBUMS[0];
+  if (!album) return;
+
+  if (countIndicator) {
+    countIndicator.innerText = `${album.className} · 共 ${album.photoCount} 張相片`;
+  }
+
+  // 渲染班級橫幅資訊
+  banner.innerHTML = `
+    <div class="class-album-banner-header">
+      <div>
+        <h3 class="class-album-banner-title">
+          <span>🎓</span> ${album.className} 畢旅相簿
+        </h3>
+        <div class="class-meta-tags-row">
+          <span class="badge-tag">隨車 第 ${album.bus} 車</span>
+          <span class="badge-tag" style="background:rgba(37, 99, 235, 0.1); color:var(--primary);">👨‍🏫 隨車導師：${album.mentor}</span>
+          <span class="badge-date">👥 學生編制：${album.detail}</span>
+          <span class="badge-date" style="color:var(--secondary); font-weight:700;">📸 收錄相片：${album.photoCount} 張</span>
+        </div>
+      </div>
+      <div class="class-banner-actions">
+        <a href="${album.padletUrl}" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-decoration:none; background:rgba(37, 99, 235, 0.08); color:var(--primary); font-weight:700; border:1px solid rgba(37, 99, 235, 0.25); padding:8px 14px; border-radius:8px;">
+          📥 前往 Padlet 下載高畫質原檔 / 上傳 ↗
+        </a>
+      </div>
+    </div>
+    <p class="class-album-desc-text">${album.description}</p>
+  `;
+
+  // 設置視圖模式 (masonry 或 grid)
+  const isGrid = AppState.classGalleryView === 'grid';
+  photosContainer.className = isGrid ? 'photos-masonry-grid view-grid-mode' : 'photos-masonry-grid';
+
+  // 渲染相片網格
+  photosContainer.innerHTML = album.photos.map((p, idx) => `
+    <div class="photo-card" onclick="openLightboxFromClass(${idx})">
+      <div class="photo-img-wrap" style="aspect-ratio: ${p.aspectRatio};">
+        <img src="${p.src}" alt="${p.title}" loading="lazy">
+        <span class="photo-card-badge">${p.className}</span>
+        ${p.time ? `<span class="photo-time-pill">${p.time.split(' ')[-1]}</span>` : ''}
+      </div>
+      <div class="photo-info-body">
+        <div class="photo-card-title">${p.title}</div>
+        <div class="photo-card-desc">${p.caption}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.openLightboxFromClass = function(index) {
+  if (typeof CLASS_ALBUMS === 'undefined') return;
+  const curClassId = AppState.classAlbumFilter || '301';
+  const album = CLASS_ALBUMS.find(a => a.classId === curClassId);
+  if (album && album.photos && album.photos.length > 0) {
+    openLightboxPhoto(album.photos, index);
+  }
+};
+
+window.startClassSlideshow = function() {
+  if (typeof CLASS_ALBUMS === 'undefined') return;
+  const curClassId = AppState.classAlbumFilter || '301';
+  const album = CLASS_ALBUMS.find(a => a.classId === curClassId);
+  if (album && album.photos && album.photos.length > 0) {
+    startSlideshow(album.photos, 0);
+  }
+};
+
+window.playRandomClassPhoto = function() {
+  if (typeof CLASS_ALBUMS === 'undefined') return;
+  const curClassId = AppState.classAlbumFilter || '301';
+  const album = CLASS_ALBUMS.find(a => a.classId === curClassId);
+  if (album && album.photos && album.photos.length > 0) {
+    const rnd = Math.floor(Math.random() * album.photos.length);
+    openLightboxPhoto(album.photos, rnd);
+  }
+};
+
+window.setClassGalleryViewMode = function(mode) {
+  AppState.classGalleryView = mode;
+  const btnMasonry = document.getElementById('btn-class-view-masonry');
+  const btnGrid = document.getElementById('btn-class-view-grid');
+  if (btnMasonry && btnGrid) {
+    if (mode === 'masonry') {
+      btnMasonry.classList.add('active');
+      btnGrid.classList.remove('active');
+    } else {
+      btnMasonry.classList.remove('active');
+      btnGrid.classList.add('active');
+    }
+  }
+  renderCurrentClassAlbum();
+};
+
+window.switchToClassAlbum = function(classId) {
+  switchTab('tab-class-albums');
+  selectClassAlbum(classId);
+};
+
+/* ==========================================================================
+   真實相片下載專區渲染 Photo Download Section (Padlet Full 9 Classes)
+   ========================================================================== */
+function renderPhotoDownloadSection() {
+  const container = document.getElementById('photo-downloads-full-grid');
+  if (!container || typeof CLASS_ALBUMS === 'undefined') return;
+
+  container.innerHTML = CLASS_ALBUMS.map((album, idx) => {
+    return `
+      <div class="download-full-card">
+        <div>
+          <div class="download-card-header">
+            <h4 class="download-card-title">
+              <span>🏫</span> ${album.className}
+            </h4>
+            <span class="badge-tag">隨車 第 ${album.bus} 車</span>
+          </div>
+          <div class="download-card-meta">
+            <div>👨‍🏫 隨車導師：<strong style="color:var(--text-main);">${album.mentor}</strong></div>
+            <div>👥 班級編制：${album.detail}</div>
+            <div>📸 站內相片：<strong>${album.photoCount} 張</strong></div>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin: 0 0 16px 0; line-height: 1.5;">
+            ${album.description}
+          </p>
+        </div>
+        <div class="download-card-actions">
+          <a href="${album.padletUrl}" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-align:center; text-decoration:none; display:block; background:var(--primary); color:#ffffff; font-weight:700; border:none; padding:10px 14px; border-radius:8px; box-shadow:0 2px 8px rgba(37,99,235,0.25);">
+            📥 前往 ${album.className} Padlet 下載原圖 / 上傳 ↗
+          </a>
+          <button class="btn-deck" onclick="switchToClassAlbum('${album.classId}')" style="width:100%; text-align:center; background:linear-gradient(135deg, #f59e0b, #ea580c); color:#ffffff; border:none; font-weight:700; padding:10px 14px; border-radius:8px; cursor:pointer;">
+            🎓 在本站直接瀏覽 ${album.className} 相簿 (${album.photoCount}張)
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ==========================================================================
    升級版大圖燈箱與全螢幕自動輪播器 (Lightbox & Slideshow Engine)
    ========================================================================== */
 function initLightbox() {
@@ -1316,11 +1569,19 @@ function updateLightboxUI() {
     img.onload = () => { img.style.opacity = '1'; };
   }
 
-  if (tag) tag.innerText = p.stationName || '實境紀實';
+  if (tag) tag.innerText = p.stationName || p.className || '實境紀實';
   if (title) title.innerText = p.title || p.fileName;
   if (counter) counter.innerText = `${idx + 1} / ${list.length}`;
-  if (timeText) timeText.innerText = `🕒 拍攝時間：${p.time || '實況'}`;
-  if (stationText) stationText.innerText = `📍 所屬行程：${p.stationName} (${p.day || ''})`;
+  if (timeText) timeText.innerText = p.time ? `🕒 拍攝時間：${p.time}` : '🕒 拍攝時間：畢業旅行實況';
+  if (stationText) {
+    if (p.stationName) {
+      stationText.innerText = `📍 所屬行程：${p.stationName} (${p.day || ''})`;
+    } else if (p.className) {
+      stationText.innerText = `🎓 所屬班級：${p.className}（隨車 第 ${p.bus} 車 · ${p.mentor || ''}）`;
+    } else {
+      stationText.innerText = '📍 畢業旅行紀實相片';
+    }
+  }
   if (captionText) captionText.innerText = p.caption || '';
 
   // 顯示或隱藏前後按鈕 (單張時隱藏)

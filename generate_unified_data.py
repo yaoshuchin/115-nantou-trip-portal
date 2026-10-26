@@ -245,6 +245,9 @@ def main():
     from build_gallery_data import build as build_gallery
     all_stations, all_photos = build_gallery()
 
+    from build_class_albums import build_class_albums
+    class_albums, all_class_photos = build_class_albums()
+
     units_data = scan_all()
     # Merge rich educational notes and live photos into each unit
     for u in units_data:
@@ -266,6 +269,8 @@ def main():
     units_json = json.dumps(units_data, ensure_ascii=False, indent=2)
     stations_json = json.dumps(all_stations, ensure_ascii=False, indent=2)
     photos_json = json.dumps(all_photos, ensure_ascii=False, indent=2)
+    class_albums_json = json.dumps(class_albums, ensure_ascii=False, indent=2)
+    class_photos_json = json.dumps(all_class_photos, ensure_ascii=False, indent=2)
     
     compatibility_code = """
 // 資料庫自動相容性補強 (Normalization)
@@ -329,9 +334,11 @@ const TRIP_DATA = {trip_data_raw};
 const UNITS_DATA = {units_json};
 const GALLERY_STATIONS = {stations_json};
 const GALLERY_PHOTOS = {photos_json};
+const CLASS_ALBUMS = {class_albums_json};
+const CLASS_PHOTOS = {class_photos_json};
 
 if (typeof module !== 'undefined') {{
-  module.exports = {{ TRIP_DATA, UNITS_DATA, GALLERY_STATIONS, GALLERY_PHOTOS }};
+  module.exports = {{ TRIP_DATA, UNITS_DATA, GALLERY_STATIONS, GALLERY_PHOTOS, CLASS_ALBUMS, CLASS_PHOTOS }};
 }}
 """
     

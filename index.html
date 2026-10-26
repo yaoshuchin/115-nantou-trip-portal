@@ -64,8 +64,8 @@
           本站完整數位化南投國中畢業旅行官方手冊（可搭配「畢旅手冊網頁版」瀏覽），結合 14 個影音與簡報單元，提供師生、家長隨身查閱行程、即時去個資房號速查、團務編組、海洋學習單與生活安全公約。
         </p>
         <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
-          <a href="https://yaoshuchin.github.io/ntjh-trip-handbook-2026" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; background:var(--primary); color:#ffffff; border-color:var(--primary); font-weight:700; padding:8px 16px; border-radius:8px;">
-            <span>📖</span> 畢旅手冊網頁版 ↗
+          <a href="https://yaoshuchin.github.io/ntjh-trip-handbook-2026/app.html" target="_blank" rel="noopener noreferrer" class="btn-deck" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; background:var(--primary); color:#ffffff; border-color:var(--primary); font-weight:700; padding:8px 16px; border-radius:8px;">
+            <span>📖</span> 115投中畢旅電子手冊 ↗
           </a>
           <div class="privacy-toggle-group">
             <span style="font-size:0.82rem; font-weight:700; padding:0 8px; color:var(--text-muted);">🛡️ 個資模式：</span>
@@ -267,7 +267,41 @@
     </section>
 
     <!-- ----------------------------------------------------------------------
-         標籤 G：畢旅實境時光廊專區 (14 站現場紀錄 · 392 張高畫質寫真)
+         標籤 1：詳細行程專區 (14 個主題單元影音與簡報展示整合)
+         ---------------------------------------------------------------------- -->
+    <section id="tab-details" class="tab-panel">
+      <!-- 詳細行程主橫幅 -->
+      <div class="unit-hero">
+        <div class="unit-meta-bar">
+          <span class="badge-tag">🗺️ 詳細行程</span>
+          <span class="badge-date">📅 115.10.20 ～ 10.23 全程</span>
+          <span class="badge-date">📚 14 個主題單元影音教材全集</span>
+        </div>
+        <h2>南投國中 115 學年度畢業旅行 · 詳細行程與 14 大主題單元教材</h2>
+        <p>
+          完整收錄三天二夜全程 14 大主題單元多媒體教材：包含行前整備說明、國道大客車逃生、田寮月世界地質科研、海生館生態特展、貓鼻頭海岸崩崖、福華入住公約、團餐健康篩選、義大世界暢玩指南、防颱緊急應變、隨車領隊真心話與奇美博物館深度參訪。每個單元均收錄 21 頁全套投影片簡報、影音導覽、高清資訊圖表與現場實景寫真。
+        </p>
+      </div>
+
+      <!-- 14 單元快速切換導覽列 (Unit Selector) -->
+      <div class="timeline-card" style="margin-bottom: 24px;">
+        <div class="unit-section-title" style="margin-top:0;">
+          <h3><span>📚</span> 14 大主題單元快速選單</h3>
+          <span class="section-indicator" id="details-unit-count-indicator">單元 01 ~ 14</span>
+        </div>
+        <div class="details-units-nav" id="details-units-nav">
+          <!-- 由 app.js 動態渲染 14 個單元按鈕 -->
+        </div>
+      </div>
+
+      <!-- 當前選中單元之完整展示容器 -->
+      <div id="details-unit-content-wrapper">
+        <!-- 由 app.js 動態渲染當前單元的影音、簡報、圖表、筆記與實況照片 -->
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         標籤 2：畢旅實境時光廊專區 (14 站現場紀錄 · 392 張高畫質寫真)
          ---------------------------------------------------------------------- -->
     <section id="tab-gallery" class="tab-panel">
       <!-- 藝廊主橫幅 -->
@@ -319,11 +353,116 @@
     </section>
 
     <!-- ----------------------------------------------------------------------
-         標籤 1 ～ 14：14 個主題單元影音與簡報展示專區
+         標籤 3：班級相簿專區 (301 ~ 309 全校 9 班 · 908 張現場寫真)
          ---------------------------------------------------------------------- -->
-    <div id="units-panels-wrapper">
-      <!-- 由 app.js 動態渲染 14 個 section -->
-    </div>
+    <section id="tab-class-albums" class="tab-panel">
+      <!-- 班級相簿主橫幅 -->
+      <div class="unit-hero class-album-hero">
+        <div class="unit-meta-bar">
+          <span class="badge-tag">🎓 班級相簿</span>
+          <span class="badge-date">📅 國三各班三日二夜寫真</span>
+          <span class="badge-date">📍 301 ~ 309 全校 9 班 · 908 張相片</span>
+        </div>
+        <h2>南投國中 115 學年度國三畢業旅行 · 各班專屬精彩相簿</h2>
+        <p>
+          本專區完整收錄 301 至 309 全校 9 個班級的現場活動精彩相片，捕捉各班在田寮月世界、國立海洋生物博物館、貓鼻頭、墾丁大街夜間巡禮與義大遊樂世界的同窗歡笑與珍貴時光。支援各班秒速切換、瀑布流預覽、高清大圖燈箱與全螢幕自動輪播。
+        </p>
+        <div class="gallery-hero-actions">
+          <button class="btn-deck btn-gallery-primary" onclick="startClassSlideshow()">
+            <span>▶️</span> 全螢幕自動輪播播放 (當前班級)
+          </button>
+          <button class="btn-deck" onclick="playRandomClassPhoto()">
+            <span>🔀</span> 隨機探索班級照片
+          </button>
+          <div class="gallery-view-toggle">
+            <span style="font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-right:6px;">排版模式：</span>
+            <button class="btn-privacy active" id="btn-class-view-masonry" onclick="setClassGalleryViewMode('masonry')">▦ 瀑布流排版</button>
+            <button class="btn-privacy" id="btn-class-view-grid" onclick="setClassGalleryViewMode('grid')">⊞ 緊湊圖磚</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 班級快速切換導覽列 (Class Switcher 301 ~ 309) -->
+      <div class="timeline-card gallery-filter-card">
+        <div class="unit-section-title" style="margin-top:0;">
+          <h3><span>🏫</span> 選擇班級相簿</h3>
+          <span class="section-indicator" id="class-albums-count-indicator">共 9 個班級 · 908 張相片</span>
+        </div>
+        <div class="class-albums-filter" id="class-albums-filter">
+          <!-- 由 app.js 動態渲染 301 ~ 309 班級按鈕 -->
+        </div>
+      </div>
+
+      <!-- 當前選中班級之資訊橫幅 (Class Banner) -->
+      <div id="class-album-banner" class="class-album-banner">
+        <!-- 由 app.js 動態渲染：班級名稱、導師、車次、男女學生數、Padlet 原圖下載連結按鈕、班級介紹 -->
+      </div>
+
+      <!-- 瀑布流/圖磚相片展示區 -->
+      <div class="photos-masonry-grid" id="class-photos-container">
+        <!-- 由 app.js 動態渲染當前班級照片 -->
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         標籤 4：真實相片下載專區 (全校 9 班專屬 Padlet 雲端相簿)
+         ---------------------------------------------------------------------- -->
+    <section id="tab-photo-download" class="tab-panel">
+      <!-- 下載專區主橫幅 -->
+      <div class="unit-hero">
+        <div class="unit-meta-bar">
+          <span class="badge-tag">📥 真實相片下載</span>
+          <span class="badge-date">☁️ Padlet 雲端相簿官方串接</span>
+          <span class="badge-date">🚀 支援超高畫質原檔下載與照片上傳</span>
+        </div>
+        <h2>各班畢旅精彩相片雲端相簿 · 高畫質原檔下載與上傳中心</h2>
+        <p>
+          為提供師長、家長與同學們最完整的高畫質畢旅影像回憶，本站特別串接南投國中 115 學年度全體 9 個班級的專屬 Padlet 雲端相簿。您可以直接在線下載原始相機高解析度大圖，亦歡迎同學與師長隨時上傳您所拍攝的珍貴瞬間，共同豐富班級回憶庫！
+        </p>
+      </div>
+
+      <!-- 下載操作指南與提示卡片 -->
+      <div class="timeline-card">
+        <div class="unit-section-title" style="margin-top:0;">
+          <h3><span>💡</span> Padlet 雲端相簿操作與下載指南</h3>
+          <span class="section-indicator">使用說明</span>
+        </div>
+        <div class="download-guide-grid">
+          <div class="download-guide-item">
+            <div class="guide-step-num">1</div>
+            <div>
+              <h4 style="margin:0 0 4px 0; color:var(--text-main);">點選班級專屬連結</h4>
+              <p style="margin:0; font-size:0.88rem; color:var(--text-muted);">在下方點擊您所在班級的「前往 Padlet 雲端相簿」按鈕，即可開啟該班專屬照片牆。</p>
+            </div>
+          </div>
+          <div class="download-guide-item">
+            <div class="guide-step-num">2</div>
+            <div>
+              <h4 style="margin:0 0 4px 0; color:var(--text-main);">高畫質原檔一鍵下載</h4>
+              <p style="margin:0; font-size:0.88rem; color:var(--text-muted);">點開任意相片後，點選右上角「下載」或「檢視原始圖片」，即可將未壓縮的高畫質原檔儲存至手機或電腦。</p>
+            </div>
+          </div>
+          <div class="download-guide-item">
+            <div class="guide-step-num">3</div>
+            <div>
+              <h4 style="margin:0 0 4px 0; color:var(--text-main);">即時上傳分享精彩鏡頭</h4>
+              <p style="margin:0; font-size:0.88rem; color:var(--text-muted);">點選 Padlet 右下角的「＋」號按鈕，即可將手機中紀錄的精彩合影與全班同學共同分享。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 班 Padlet 雲端相簿卡片網格 -->
+      <div class="timeline-card">
+        <div class="unit-section-title" style="margin-top:0;">
+          <h3><span>📸</span> 全校 9 班專屬 Padlet 雲端相簿總覽</h3>
+          <span class="section-indicator">全校 9 班</span>
+        </div>
+        <div class="photo-downloads-full-grid" id="photo-downloads-full-grid">
+          <!-- 由 app.js 動態渲染 9 班卡片 -->
+        </div>
+      </div>
+    </section>
 
   </main>
 
