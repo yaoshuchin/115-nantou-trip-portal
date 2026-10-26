@@ -95,7 +95,7 @@ STATIONS_DEF = [
         "day": "Day 1",
         "date": "115/10/21",
         "unitId": "unit-08",
-        "unitTitle": "單元 08 · 墾丁探訪攻略",
+        "unitTitle": "單元 08 · 墾丁夜市攻略",
         "description": "南台灣最熱鬧南洋風情夜市：同學分組結伴品嚐在地美食、體驗街頭氛圍與定點集合守時紀律。"
     },
     {
